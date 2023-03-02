@@ -5,7 +5,7 @@ import pymorphy2
 
 from fastapi import FastAPI
 from pydantic import BaseModel
-from tinydb import TinyDB
+from tinydb import TinyDB, Query
 from typing import List
 
 from collections import Counter
@@ -13,6 +13,7 @@ from collections import Counter
 app = FastAPI()
 morph = pymorphy2.MorphAnalyzer()
 db = TinyDB('/home/needslyp/labs/sem6/EYzIIS/db.json')
+check = Query()
 
 
 def get_words(lines, type=True):
@@ -37,8 +38,13 @@ def get_words(lines, type=True):
 def parse_words(words: dict):
     parsed_words = []
     for word in words.keys():
-        p_word = morph.parse(word)[0].tag
-        parsed_words.append({'word': word, 'amount': words[word],'POS': p_word.POS, 'animacy': p_word.animacy, 'case': p_word.case, 'gender': p_word.gender, 'mood': p_word.mood,
+
+        if db.search(check.word == word):
+            parsed_words.append({'word': word, 'amount': words[word],'POS': p_word.POS, 'animacy': p_word.animacy, 'case': p_word.case, 'gender': p_word.gender, 'mood': p_word.mood,
+                              'number': p_word.number, 'person': p_word.person, 'tense': p_word.tense, 'transitivity': p_word.transitivity, 'voice': p_word.voice})
+        else: 
+            p_word = morph.parse(word)[0].tag
+            parsed_words.append({'word': word, 'amount': words[word],'POS': p_word.POS, 'animacy': p_word.animacy, 'case': p_word.case, 'gender': p_word.gender, 'mood': p_word.mood,
                               'number': p_word.number, 'person': p_word.person, 'tense': p_word.tense, 'transitivity': p_word.transitivity, 'voice': p_word.voice})
     
     return parsed_words
@@ -59,14 +65,6 @@ class Word(BaseModel):
     voice: Union[str, None] = None
 
 
-class Words(BaseModel):
-    words: Union[List[Word], None] = None
-
-@app.get('/')
-def read_root():
-    return {'message': 'Hello World'}
-
-
 @app.get('/file/get')
 def get_words_from_file(file_path: str):
     try:
@@ -82,7 +80,7 @@ def get_words_from_file(file_path: str):
         f.close()
 
     except FileNotFoundError:
-        return {'text': 'file not found'}
+        return {'msg': 'file not found'}
 
 
     return {'file': file_path, 'text': lines, 'words': parsed_words}
@@ -103,7 +101,28 @@ def get_all_fromd_db():
     return {'db': db.all()}
 
 
-@app.post('/db/put')
-def save_and_update_db(words: Words):
-    print(words)
-    return words
+@app.post('/db/post')
+def save_and_update_db(words: List[Word]):
+    for word in words:
+        print(word.word) 
+        if db.search(check.word == word.word):
+            db.update({'word': word.word, 'amount': word.amount,'POS': word.POS, 'animacy': word.animacy, 'case': word.case, 'gender': word.gender, 'mood': word.mood,
+                              'number': word.number, 'person': word.person, 'tense': word.tense, 'transitivity': word.transitivity, 'voice': word.voice})
+        else: 
+            db.insert({'word': word.word, 'amount': word.amount,'POS': word.POS, 'animacy': word.animacy, 'case': word.case, 'gender': word.gender, 'mood': word.mood,
+                              'number': word.number, 'person': word.person, 'tense': word.tense, 'transitivity': word.transitivity, 'voice': word.voice})
+    return {'msg': 'db is updated'}
+
+@app.delete('/db/word/del')
+def delete_word(word: str):
+    if db.search(check.word == word):
+        db.remove(check.word == word)
+        return {'msg': 'word is deleted'}
+    else:
+        return {'msg': 'word is not exist'}
+
+@app.delete('/db/del')
+def clear_db():
+    db.truncate()
+    return {'msg': 'db is clear'}
+
