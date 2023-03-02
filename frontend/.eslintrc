@@ -34,6 +34,8 @@
 	},
 	"ignorePatterns": [".eslintrc.js", "Dockerfile", "**/*.json", "*.md", "main.js"],
 	"rules": {
+		"import/no-unresolved": "off",
+
 		"no-undef": "error",
 		"@typescript-eslint/no-unused-vars": ["warn"],
 		"@typescript-eslint/no-var-requires": "off",

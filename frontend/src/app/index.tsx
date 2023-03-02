@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { withProviders } from './providers'
-import { IISAppRouting } from '../pages'
+import { ReversoAppRouting } from '@pages'
 
-import './styles/index.scss'
+import '@shared/styles/index.scss'
 
-const IISApp = () => {
-	return <IISAppRouting />
+const ReversoApp = () => {
+	return <ReversoAppRouting />
 }
 
-export default withProviders(IISApp)
+export default withProviders(ReversoApp)

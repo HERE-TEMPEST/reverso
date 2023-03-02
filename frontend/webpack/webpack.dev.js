@@ -11,6 +11,7 @@ module.exports = {
 		port: 3001,
 		open: true
 	},
+
 	plugins: [
 		new webpack.DefinePlugin({
 			'process.env.name': JSON.stringify('1.0 Development Version')

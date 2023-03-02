@@ -1,7 +1,7 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-undef */
 const path = require('path')
-// const tsconfig = require('../tsconfig.json')
+const tsconfig = require('../tsconfig-path.json')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const miniCss = require('mini-css-extract-plugin')
@@ -9,12 +9,12 @@ const miniCss = require('mini-css-extract-plugin')
 module.exports = {
 	entry: path.resolve(__dirname, '..', './src/index.tsx'),
 	resolve: {
-		extensions: ['.tsx', '.ts', '.js']
-		// alias: Object.keys(tsconfig.compilerOptions.paths).reduce((aliases, aliasName) => {
-		// 	aliases[aliasName] = path.resolve(__dirname, '..', `src/${tsconfig.compilerOptions.paths[aliasName][0]}`)
+		extensions: ['.tsx', '.ts', '.js'],
+		alias: Object.keys(tsconfig.compilerOptions.paths).reduce((aliases, aliasName) => {
+			aliases[aliasName] = path.resolve(__dirname, '..', `${tsconfig.compilerOptions.paths[aliasName][0]}`)
 
-		// 	return aliases
-		// }, {})
+			return aliases
+		}, {})
 	},
 	module: {
 		rules: [

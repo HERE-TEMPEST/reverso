@@ -1,11 +1,7 @@
 import React from 'react'
 
-import { Routes, Route } from 'react-router-dom'
+import { GenerateRoutes } from './routes'
 
-export const IISAppRouting = () => {
-	return (
-		<Routes>
-			<Route index path={'/'} element={<div>Hello World</div>} />
-		</Routes>
-	)
+export const ReversoAppRouting = () => {
+	return <GenerateRoutes />
 }

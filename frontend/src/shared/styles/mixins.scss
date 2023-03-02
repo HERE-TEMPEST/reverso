@@ -1,0 +1,34 @@
+@import 'theme';
+
+@mixin screen($size) {
+	$mediaQueries: (
+		'mobile-small': $media-mobile-small,
+		'mobile': $media-mobile,
+		'mobile-portrait': $media-mobile-portrait,
+		'mobile-landscape': $media-mobile-landscape,
+		'tablet': $media-tablet,
+		'tablet-portrait': $media-tablet-portrait,
+		'tablet-landscape': $media-tablet-landscape,
+		'desktop': $media-desktop,
+		'desktop-hd': $media-desktop-hd,
+		'non-mobile': $media-non-mobile,
+		'non-desktop': $media-non-desktop,
+		'small-desktop': $media-small-desktop
+	);
+
+	// Use predefined media query
+	@each $key, $value in $mediaQueries {
+		@if $key == $size {
+			@media only screen and #{$value} {
+				@content;
+			}
+		}
+	}
+
+	// Use custom media query
+	@if map-has-key($mediaQueries, $size) != true {
+		@media only screen and #{$size} {
+			@content;
+		}
+	}
+}

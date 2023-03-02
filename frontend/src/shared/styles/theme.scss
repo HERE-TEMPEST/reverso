@@ -1,0 +1,36 @@
+// VARS
+
+$border-color: rgba(
+	$color: gray,
+	$alpha: 0.2
+);
+
+$element-color: #ffffff;
+
+$background-color: white;
+
+// Media queries
+// -------------------------------------------------------------------------------------------------
+$media-mobile-small-max: 350;
+$media-mobile-max: 767;
+$media-tablet-min: 768;
+$media-tablet-max: 1024;
+$media-desktop-min: $media-tablet-max + 1;
+$media-desktop-hd-min: 1920;
+$media-desktop-small-max: 1300;
+
+$media-mobile: '(max-width: #{$media-mobile-max}px)';
+$media-mobile-small: '(max-width: #{$media-mobile-small-max}px)';
+$media-mobile-landscape: '(max-width: #{$media-mobile-max}px) and (orientation: landscape)';
+$media-mobile-portrait: '(max-width: #{$media-mobile-max}px) and (orientation: portrait)';
+
+$media-tablet: '(min-width: #{$media-tablet-min}px) and (max-width: #{$media-tablet-max}px)';
+$media-tablet-landscape: '(min-width: #{$media-tablet-min}px) and (max-width: #{$media-tablet-max}px) and (orientation: landscape)';
+$media-tablet-portrait: '(min-width: #{$media-tablet-min}px) and (max-width: #{$media-tablet-max}px) and (orientation: portrait)';
+
+$media-desktop: '(min-width: #{$media-desktop-min}px)';
+$media-desktop-hd: '(min-width: #{$media-desktop-hd-min}px)';
+$media-small-desktop: '(min-width: #{$media-desktop-min}px) and (max-width: #{$media-desktop-small-max}px)';
+
+$media-non-mobile: '(min-width: #{$media-mobile-max}px)';
+$media-non-desktop: '(max-width: #{$media-tablet-max}px)';
