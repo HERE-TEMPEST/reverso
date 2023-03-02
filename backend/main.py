@@ -17,7 +17,6 @@ check = Query()
 
 
 def get_words(lines, type=True):
-    
     words = []
     if type:
         lines : list
@@ -64,6 +63,9 @@ class Word(BaseModel):
     transitivity: Union[str, None] = None
     voice: Union[str, None] = None
 
+class Text(BaseModel):
+    text: str
+
 
 @app.get('/file/get')
 def get_words_from_file(file_path: str):
@@ -89,14 +91,14 @@ def get_words_from_file(file_path: str):
     return {'file': file_path, 'text': lines, 'words': parsed_words}
 
 
-@app.get('/text/get')
-def get_words_from_text(text: str):
-    words = get_words(text, False)
+@app.post('/text/post')
+def get_words_from_text(text: Text):
+    words = get_words(text.text, False)
     word_counts = Counter(words)
 
     parsed_words = parse_words(word_counts)
 
-    return {'text': text, 'words': parsed_words}
+    return {'text': text.text, 'words': parsed_words}
 
 
 @app.get('/db/get')
