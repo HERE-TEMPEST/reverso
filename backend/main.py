@@ -37,10 +37,9 @@ def get_words(lines, type=True):
 def parse_words(words: dict):
     parsed_words = []
     for word in words.keys():
-
         if db.search(check.word == word):
-            parsed_words.append({'word': word, 'amount': words[word],'POS': p_word.POS, 'animacy': p_word.animacy, 'case': p_word.case, 'gender': p_word.gender, 'mood': p_word.mood,
-                              'number': p_word.number, 'person': p_word.person, 'tense': p_word.tense, 'transitivity': p_word.transitivity, 'voice': p_word.voice})
+            db.update({'amount': words[word]}, check.word == word)
+            parsed_words.append(db.search(check.word == word)[0])
         else: 
             p_word = morph.parse(word)[0].tag
             parsed_words.append({'word': word, 'amount': words[word],'POS': p_word.POS, 'animacy': p_word.animacy, 'case': p_word.case, 'gender': p_word.gender, 'mood': p_word.mood,
@@ -102,7 +101,7 @@ def get_words_from_text(text: Text):
 
 
 @app.get('/db/get')
-def get_all_fromd_db():
+def get_all_from_db():
     return {'db': db.all()}
 
 
