@@ -1,13 +1,13 @@
 @function vw($val) {
-	@return $val / 1920 * 100 + vw;
+	@return $val / 1440 * 100 + vw;
 }
 
 @function vhw($val) {
-	@return $val / 2300 * 100 + vw;
+	@return $val / 2240 * 100 + vw;
 }
 
 @function vh($val) {
-	@return $val / 1200 * 100 + vh;
+	@return $val / 1024 * 100 + vh;
 }
 
 @function vw_m($val) {

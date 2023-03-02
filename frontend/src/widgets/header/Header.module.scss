@@ -1,0 +1,72 @@
+@import '../../shared/styles/index.scss';
+
+.wrapper {
+	position: sticky;
+	background: $header;
+	min-height: vw(50);
+	grid-column-start: 1;
+	grid-column-end: 3;
+	z-index: 1;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+  @include screen('mobile') {
+    min-height: vw_m(90);
+  }
+
+  .logo {
+		cursor: pointer;
+    display: flex;
+    align-items: center;
+		margin-left: vw(40);
+    width: vw(95);
+    height: vw(28);
+
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+
+    @include screen('mobile') {
+      margin-left: vw_m(40);
+      width: vw_m(155);
+      height: vw_m(68);
+    }
+  
+    
+		img {
+			width: vw(95);
+			height: vw(28);
+
+      @include screen('mobile') {
+        width: vw_m(155);
+        height: vw_m(68);
+      }  
+    }
+	}
+
+  .burgerMenuIcon {
+    cursor: pointer;
+    margin-right: vw(40);
+    width: vw(28);
+    height: vw(28);
+
+    @include screen('mobile') {
+      margin-right: vw_m(40);
+      width: vw_m(44);
+      height: vw_m(44);
+    }
+
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+    svg {
+      width: vw(28);
+      height: vw(28);
+
+      @include screen('mobile') {
+        width: vw_m(44);
+        height: vw_m(44);
+      }  
+  
+    }
+  }
+}

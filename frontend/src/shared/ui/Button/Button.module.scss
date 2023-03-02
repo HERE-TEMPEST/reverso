@@ -1,0 +1,26 @@
+@import '../../styles/index.scss';
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+  height: fit-content;
+  
+  background: #759CD8;
+  border-radius: vw(20);
+
+  font-weight: 400;
+  font-size: vw(20);
+  line-height: vw(24);
+  border: none;
+
+  color: #FFFFFF;
+
+  @include screen('mobile') {
+    font-size: vw_m(24);
+    line-height: vw_m(26);
+    border-radius: vw_m(20);
+  }
+}

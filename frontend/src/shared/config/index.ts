@@ -1,1 +1,2 @@
-export const API_URL = 'http://127.0.0.1:3000'
+export * from './routes.config'
+export * from './api.config'

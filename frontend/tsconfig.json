@@ -22,8 +22,15 @@
 			"@pages/*": ["src/pages/*"],
 			"@pages": ["src/pages/index"],
 			"@app/*": ["src/app/*"],
-			"@app": ["src/app/index"]
-		}
+			"@app": ["src/app/index"],
+			"@widgets/*": ["src/widgets/*"],
+			"@widgets": ["src/widgets/index"],
+			"@entities/*": ["src/entities/*"],
+			"@entities": ["src/entities/index"],
+      "@public/*": ["public/*"],
+      "@features/*": ["src/features/*"],
+			"@features": ["src/features/index"]
+    }
 	},
-	"include": ["src"]
+	"include": ["src", "typings"]
 }

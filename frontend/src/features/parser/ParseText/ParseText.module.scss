@@ -1,0 +1,11 @@
+@import '../../../shared/styles/index.scss';
+
+.wrapper {
+  width: vw(205);
+  height: vw(45);
+
+  @include screen('mobile') {
+    width: vw_m(250);
+    height: vw_m(50);  
+  }
+}

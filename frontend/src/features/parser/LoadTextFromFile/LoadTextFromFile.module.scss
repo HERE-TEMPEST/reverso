@@ -1,0 +1,16 @@
+@import '../../../shared/styles/index.scss';
+
+.wrapper {
+  width: vw(225);
+  height: vw(45);
+  background: #9CB9D1;
+
+  @include screen('mobile') {
+    width: vw_m(270);
+    height: vw_m(50);  
+  }
+}
+
+.file {
+  display: none;
+}

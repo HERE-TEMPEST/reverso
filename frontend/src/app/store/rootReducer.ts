@@ -1,3 +1,7 @@
 import { combineReducers } from 'redux'
 
-export const rootReducer = combineReducers({})
+import { parsingTextReducer } from '@entities/text'
+
+export const rootReducer = combineReducers({
+	parsingPage: parsingTextReducer
+})

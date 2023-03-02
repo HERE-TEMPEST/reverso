@@ -3,7 +3,12 @@
 		"paths": {
 			"@shared": ["src/shared"],
 			"@pages": ["src/pages"],
-			"@app": ["src/app"]
-		}
+			"@app": ["src/app"],
+			"@widgets": ["src/widgets"],
+			"@entities": ["src/entities"],
+      "@features": ["src/features"],
+      "@public": ["public"]
+      
+    }
 	}
 }

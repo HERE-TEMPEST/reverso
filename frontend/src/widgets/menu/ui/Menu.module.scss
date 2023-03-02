@@ -1,0 +1,132 @@
+@import '../../../shared/styles/index.scss';
+
+@keyframes menu-open{
+  0%{
+    transform: translateX(vw(300));
+    
+    @include screen('mobile') {
+      transform: translateX(vw_m(400));
+    }
+  }
+  100%{
+    transform: translateX(0);
+  }
+}
+
+@keyframes menu-close {
+  0%{
+    transform: translateX(0);
+  }
+  100%{
+    transform: translateX(vw(300));
+
+    @include screen('mobile') {
+      transform: translateX(vw_m(400));
+    }
+  }  
+}
+
+.wrapper {
+  position: absolute;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  
+  background: transparentize($color: #000000, $amount: 0.6);
+
+
+  .menuOpened {
+    animation: menu-open 0.5s ease; 
+  }
+  
+  .menuClosed {
+    animation: menu-close 0.5s ease;
+  }
+  
+  
+  .menuWrapper{
+    display: flex;
+    background: $header;
+    margin-left: auto;
+    width: vw(300);
+    height: 100%;
+    flex-direction: column;
+    
+    transition: all 0.5s ease-in-out;
+
+    @include screen('mobile') {
+      width: vw_m(400);
+    }
+  
+    
+    .logo {
+      width: vw(95);
+      height: vw(28);
+      align-self: flex-end;
+      margin: vw(18) vw(28) 0 0;
+      cursor: pointer;
+
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+      @include screen('mobile') {
+        margin: vw_m(18) vw_m(28) 0 0;
+        width: vw_m(155);
+        height: vw_m(68);
+      }  
+    
+      img {
+        width: vw(95);
+        height: vw(28);
+
+        @include screen('mobile') {
+          width: vw_m(155);
+          height: vw_m(68);
+        }  
+      }
+    }
+
+    .grayLine {
+      margin-top: vw(17);
+      width: vw(262);
+      height: vw(2);
+      background: #CFDAEC;
+      align-self: center;
+
+      @include screen('mobile') {
+        margin-top: vw_m(17);
+        width: vw_m(350);
+        height: vw_m(2);
+      }    
+    }
+
+    .links {  
+      margin: vw(26) vw(60) 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      @include screen('mobile') {
+        margin: vw_m(26) vw_m(60) 0 0;
+      }   
+
+      .link {
+        text-decoration: none;
+
+
+        font-weight: 600;
+        font-size: vw(16);
+        line-height: vw(19);
+        color: #EEF0F6;
+
+        height: vw(30);   
+        
+        @include screen('mobile') {
+          font-size: vw_m(28);
+          line-height: vw_m(30);
+          height: vw_m(50);   
+        }
+      }
+    }    
+  }
+}
