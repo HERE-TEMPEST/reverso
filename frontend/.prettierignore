@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+Dockerfile
+*.css
+*.eslintrc
+*.prettierrc
+*.json
+*.lock
+*.md
+public
+webpack
