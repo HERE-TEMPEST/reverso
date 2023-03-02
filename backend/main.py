@@ -80,7 +80,10 @@ def get_words_from_file(file_path: str):
         f.close()
 
     except FileNotFoundError:
-        return {'msg': 'file not found'}
+        return {'msg': 'file not found, dude'}
+    
+    except IsADirectoryError:
+        return {'msg': 'it\'s not a file, dude'}
 
 
     return {'file': file_path, 'text': lines, 'words': parsed_words}
@@ -111,18 +114,18 @@ def save_and_update_db(words: List[Word]):
         else: 
             db.insert({'word': word.word, 'amount': word.amount,'POS': word.POS, 'animacy': word.animacy, 'case': word.case, 'gender': word.gender, 'mood': word.mood,
                               'number': word.number, 'person': word.person, 'tense': word.tense, 'transitivity': word.transitivity, 'voice': word.voice})
-    return {'msg': 'db is updated'}
+    return {'msg': 'db is updated, dude'}
 
 @app.delete('/db/word/del')
 def delete_word(word: str):
     if db.search(check.word == word):
         db.remove(check.word == word)
-        return {'msg': 'word is deleted'}
+        return {'msg': 'word is deleted, dude'}
     else:
-        return {'msg': 'word is not exist'}
+        return {'msg': 'word is not exist, dude'}
 
 @app.delete('/db/del')
 def clear_db():
     db.truncate()
-    return {'msg': 'db is clear'}
+    return {'msg': 'db is clear, dude'}
 
