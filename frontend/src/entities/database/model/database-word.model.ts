@@ -3,6 +3,7 @@ import _ from 'lodash'
 
 import {
 	ChangeDatabaseFiltersAction,
+	ChangeStateDatabaseAction,
 	DatabaseWordLoadedInfoAction,
 	ErrorInLoadingDatabaseWordInfoAction,
 	LoadingDatabaseWordInfoAction
@@ -39,10 +40,12 @@ export const databaseWordReducer = createReducer(initialState, (builder) => {
 
 			const { data } = payload
 
+			const sortedData = data.sort((a: IDatabaseWord, b: IDatabaseWord) => a.word.localeCompare(b.word))
+
 			return {
 				...state,
-				data: applyDatabaseFilters(state.filters, data),
-				_data: data,
+				data: applyDatabaseFilters(state.filters, sortedData),
+				_data: sortedData,
 				isLoading: false,
 				isLoaded: true,
 				isFailed: false,
@@ -68,19 +71,11 @@ export const databaseWordReducer = createReducer(initialState, (builder) => {
 			}
 		})
 
-		// .addCase(UpdateDatabaseWordInfoAction, (state, action) => {
-		// 	const { payload } = action
-
-		// 	const { data } = payload
-
-		// 	return {
-		// 		data: _.assign({}, state.data, data),
-		// 		isLoading: false,
-		// 		isLoaded: true,
-		// 		isFailed: false,
-		// 		error: null
-		// 	}
-		// })
+		.addCase(ChangeStateDatabaseAction, () => {
+			return {
+				...initialState
+			}
+		})
 
 		.addCase(ErrorInLoadingDatabaseWordInfoAction, (state, action) => {
 			const {

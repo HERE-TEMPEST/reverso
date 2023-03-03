@@ -17,8 +17,7 @@ db = TinyDB('./db.json')
 check = Query()
 
 origins = [
-    "http://127.0.0.1:3001",
-    "http://localhost:3001",
+   "*"
 ]
 
 
@@ -124,8 +123,8 @@ def save_and_update_db(words: List[Word]):
     for word in words:
         print(word.word) 
         if db.search(check.word == word.word):
-            db.update({'word': word.word, 'amount': word.amount,'POS': word.POS, 'animacy': word.animacy, 'case': word.case, 'gender': word.gender, 'mood': word.mood,
-                              'number': word.number, 'person': word.person, 'tense': word.tense, 'transitivity': word.transitivity, 'voice': word.voice})
+            db.update({'amount': word.amount,'POS': word.POS, 'animacy': word.animacy, 'case': word.case, 'gender': word.gender, 'mood': word.mood,
+                              'number': word.number, 'person': word.person, 'tense': word.tense, 'transitivity': word.transitivity, 'voice': word.voice}, check.word == word)
         else: 
             db.insert({'word': word.word, 'amount': word.amount,'POS': word.POS, 'animacy': word.animacy, 'case': word.case, 'gender': word.gender, 'mood': word.mood,
                               'number': word.number, 'person': word.person, 'tense': word.tense, 'transitivity': word.transitivity, 'voice': word.voice})

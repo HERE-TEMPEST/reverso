@@ -1,9 +1,9 @@
-import { InputTextWidget } from '@widgets/parser'
+import { DataWidget } from '@widgets/parsed-text'
 
 export const ParsedTextPage = () => {
 	return (
 		<>
-			<InputTextWidget />
+			<DataWidget />
 		</>
 	)
 }

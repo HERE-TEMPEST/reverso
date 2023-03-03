@@ -1,0 +1,31 @@
+@import '../../../shared/styles/index.scss';
+
+.wrapper {
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+
+  gap: vw(8);
+
+  .grayLine {
+    margin: vw(8) 0 vw(8) 0;
+    width: vw(1100);
+    height: vw(2);
+    background: #9CB9D1;
+    align-self: center;
+
+    @include screen('mobile') {
+      margin-top: vw_m(8);
+      width: vw_m(700);
+      height: vw_m(2);
+    }    
+  }
+
+  .word {
+    margin-left: vw(80);
+
+    @include screen('mobile') {
+      margin-left: vw_m(70);
+    }    
+  }
+}

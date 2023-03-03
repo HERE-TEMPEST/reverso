@@ -28,6 +28,12 @@ export const DataWidget = () => {
 	}, [])
 
 	useEffect(() => {
+		if (!isLoaded) {
+			loadDatabaseWordInfo()
+		}
+	}, [isLoaded])
+
+	useEffect(() => {
 		console.log(result)
 	}, [result])
 
