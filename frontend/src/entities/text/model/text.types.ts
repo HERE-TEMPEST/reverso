@@ -1,5 +1,8 @@
+import { IDatabaseWord } from '@entities/database'
+
 export interface TextState {
 	data: string
+	words: Array<IDatabaseWord>
 }
 
 export enum TextActionsTokens {

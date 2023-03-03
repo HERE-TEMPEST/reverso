@@ -2,6 +2,6 @@ import * as getsRequests from './gets'
 
 type DatabaseRequests = typeof getsRequests
 
-export const Databases: DatabaseRequests = {
+export const database: DatabaseRequests = {
 	...getsRequests
 }

@@ -2,15 +2,14 @@
 
 html * {
 	height: 100%;
-	font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 	font-style: normal, sans-serif;
 }
 
 body {
 	background: $background-color;
-  overflow: hidden;
+  overflow-x: hidden;
 
-	height: 100%;
 	margin: 0 0;
 	left: 0;
 	top: 0;

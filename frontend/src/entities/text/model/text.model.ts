@@ -5,7 +5,8 @@ import { UpdateTextInfoAction } from './actions'
 import { TextState } from './text.types'
 
 const initialState: TextState = {
-	data: ''
+	data: '',
+	words: []
 }
 
 export const parsingTextReducer = createReducer(initialState, (builder) => {
@@ -15,7 +16,8 @@ export const parsingTextReducer = createReducer(initialState, (builder) => {
 		const { data } = payload
 
 		return {
-			data: data
+			data: data,
+			words: []
 		}
 	})
 })

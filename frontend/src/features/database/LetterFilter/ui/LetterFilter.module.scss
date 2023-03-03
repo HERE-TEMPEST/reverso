@@ -1,0 +1,48 @@
+@import '../../../../shared/styles/index.scss';
+
+.wrapper {
+
+  display: flex;
+  flex-direction: column;
+  
+  .letter {
+    height: vw(16);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: vw(14);
+    line-height: vw(16);
+    text-align: right;
+
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+    color: #759CD8;
+
+    @include screen('mobile') {
+      height: vw_m(25);
+      font-size: vw_m(44);
+      line-height: vw_m(46);  
+    }
+  }
+
+  .active{
+    height: vw(25);
+    width: vw(25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #9CB9D1;
+    border-radius: vw(20);
+
+
+    @include screen('mobile') {
+      height: vw_m(60);
+      width: vw_m(60);
+      border-radius: vw_m(60);
+    }
+}
+  
+  // @include screen('mobile') {
+  //   width: vw_m(270);
+  //   height: vw_m(50);  
+  // }
+}

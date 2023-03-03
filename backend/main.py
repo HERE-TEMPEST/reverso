@@ -7,14 +7,28 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from tinydb import TinyDB, Query
 from typing import List
+from fastapi.middleware.cors import CORSMiddleware
 
 from collections import Counter
 
 app = FastAPI()
 morph = pymorphy2.MorphAnalyzer()
-db = TinyDB('/home/needslyp/labs/sem6/EYzIIS/db.json')
+db = TinyDB('./db.json')
 check = Query()
 
+origins = [
+    "http://127.0.0.1:3001",
+    "http://localhost:3001",
+]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_words(lines, type=True):
     words = []

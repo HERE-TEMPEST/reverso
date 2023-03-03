@@ -1,0 +1,21 @@
+@import '../../../../shared/styles/index.scss';
+
+.wrapper {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: vw(15);
+  font-weight: 500;
+  font-size: vw(24);
+  line-height: vw(26);
+  font-style: normal;  
+  color: #759CD8;
+
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  @include screen('mobile') {
+    height: vw_m(50);
+    font-size: vw_m(40);
+    line-height: vw_m(40);
+  }
+}

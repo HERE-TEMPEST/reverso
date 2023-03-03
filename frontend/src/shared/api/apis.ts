@@ -1,1 +1,5 @@
-export const uris = {}
+export const uris = {
+	gets: {
+		database: '/db/get'
+	}
+}

@@ -1,13 +1,8 @@
-// import { mocks } from '../../mocks'
-import { mocks } from '../../mocks'
+import { apiInstance } from '../api-instance'
+import { uris } from '../apis'
 
 export const getAllWords = async (): Promise<any> => {
-	// console.log({ userId })
-	// const { data } = await apiInstance.get(`/${uris.gets.userInfo(userId)}`, {
-	// 	headers: {
-	// 		Authorization: `Bearer ${token}`
-	// 	}
-	// })
+	const { data } = await apiInstance.get(uris.gets.database)
 
-	return mocks.database
+	return data.db
 }

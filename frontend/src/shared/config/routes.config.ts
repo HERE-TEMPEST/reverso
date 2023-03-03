@@ -11,6 +11,12 @@ export const appRoutes = {
 			return '/'
 		}
 	},
+	parsedText: {
+		path: 'parsed-text',
+		goto() {
+			return '/parsed-text'
+		}
+	},
 	supports: {
 		path: 'supports',
 		goto() {

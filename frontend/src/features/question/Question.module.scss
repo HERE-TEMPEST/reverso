@@ -1,0 +1,23 @@
+@import '../../shared/styles/index.scss';
+
+.wrapper {
+  cursor: pointer;
+  width: vw(50);
+  height: vw(50);
+
+  @include screen('mobile') {
+    width: vw_m(100);
+    height: vw_m(100);
+  }
+
+
+  svg{
+    width: vw(50);
+    height: vw(50);  
+
+    @include screen('mobile') {
+      width: vw_m(100);
+      height: vw_m(100);
+    }
+  } 
+}
