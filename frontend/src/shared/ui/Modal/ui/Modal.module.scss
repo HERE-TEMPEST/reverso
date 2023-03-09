@@ -71,13 +71,24 @@
 					height: vw(45);
 					display: flex;
 
+          .btn {
+            height: vw(45);
+            width: vw(200);
+          }
+
+          .disabled {
+            opacity: 0.6;
+          }
+
 					.whiteButton {
 						margin-right: vw(18);
 						color: #868282;
 
+            height: vw(45);
+            width: vw(150);
+
 						background: #ffffff;
 						border: 1px solid #868282;
-						border-radius: vw(10);
 					}
 				}
 			}

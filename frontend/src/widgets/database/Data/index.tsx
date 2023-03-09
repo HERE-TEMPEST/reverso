@@ -33,10 +33,6 @@ export const DataWidget = () => {
 		}
 	}, [isLoaded])
 
-	useEffect(() => {
-		console.log(result)
-	}, [result])
-
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.header}>

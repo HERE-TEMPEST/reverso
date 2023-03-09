@@ -21,3 +21,28 @@
     }
   } 
 }
+
+
+.info {
+  &::-webkit-scrollbar {
+    width: vw(4);
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: gray;
+  }
+
+  font-weight: 500;
+  font-size: vw(14);
+  line-height: vw(15);
+  color: #094D74;
+
+  border-radius: 20px;
+  padding: vw(10);
+  position: absolute;
+  z-index: 999999;
+  width: vw(250);
+  overflow: auto scroll;
+  height: vw(250);
+  background: $header;
+}

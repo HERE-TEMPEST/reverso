@@ -5,5 +5,8 @@ export const uris = {
 	posts: {
 		parseText: '/text/post',
 		saveDatabase: '/db/post'
-	}
+	},
+  delete: {
+    deleteWord: '/db/word/del'
+  }
 }

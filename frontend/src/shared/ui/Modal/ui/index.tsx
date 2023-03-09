@@ -91,7 +91,12 @@ export const Modal = function <IState, NavTypes>(props: ModalProps<IState, NavTy
 							)}
 							<div className={styles.btns}>
 								<Button className={styles.whiteButton} title="Отмена" onClick={close} />
-								<Button title={submitButtonTitle} onClick={onUpdateHandler} />
+								<Button
+									className={classNames(styles.btn, isValid ? '' : styles.disabled)}
+									title={submitButtonTitle}
+									disabled={!isValid}
+									onClick={onUpdateHandler}
+								/>
 							</div>
 						</div>
 					</section>

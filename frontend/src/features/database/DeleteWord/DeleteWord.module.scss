@@ -1,0 +1,15 @@
+@import '../../../shared/styles/index.scss';
+
+.wrapper {
+	cursor: pointer;
+
+	.icon {
+		height: vw(24);
+		width: vw(24);
+
+		svg {
+			height: vw(24);
+			width: vw(24);
+		}
+	}
+}

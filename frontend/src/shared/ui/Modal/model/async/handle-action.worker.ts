@@ -1,12 +1,10 @@
-import { call, put } from 'redux-saga/effects'
-
-import { appSelect } from '../../../../libs'
+import { put } from 'redux-saga/effects'
 
 import { ComplitingModalHandlerAction, ErrorInComplitingModalHandlerAction, ModalHandlerComplitedAction } from '../actions'
 
 interface HandleModalActionWorkerProps {
 	payload: {
-		handler: (state: any, meta: { token: string }) => Generator
+		handler: (state: any) => Generator
 		state: any
 	}
 }
@@ -17,9 +15,7 @@ export const handleModalActionWorker = function* ({ payload }: HandleModalAction
 
 		yield put(ComplitingModalHandlerAction())
 
-		const token = yield* appSelect((state) => state.auth.data?.accessToken)
-
-		yield* handler(state, { token: token! })
+		yield* handler(state)
 
 		yield put(ModalHandlerComplitedAction())
 	} catch (e: any) {

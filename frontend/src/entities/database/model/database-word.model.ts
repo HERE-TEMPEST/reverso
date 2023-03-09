@@ -6,7 +6,9 @@ import {
 	ChangeStateDatabaseAction,
 	DatabaseWordLoadedInfoAction,
 	ErrorInLoadingDatabaseWordInfoAction,
-	LoadingDatabaseWordInfoAction
+	LoadingDatabaseWordInfoAction,
+	AddNewWordAction,
+	DeleteWordAction
 } from './actions'
 
 import { DatabaseFilters, DatabaseWordState, IDatabaseWord } from './database-word.types'
@@ -64,6 +66,49 @@ export const databaseWordReducer = createReducer(initialState, (builder) => {
 				...state,
 				filters: newFilters,
 				data: applyDatabaseFilters(newFilters, state._data),
+				isLoading: false,
+				isLoaded: true,
+				isFailed: false,
+				error: null
+			}
+		})
+
+		.addCase(AddNewWordAction, (state, action) => {
+			const { payload } = action
+
+			const { data } = payload
+
+			data.word = data.word.toLowerCase()
+
+			const newData = [
+				...state._data.filter((word) => word.word.trim().toLowerCase() !== data.word.trim().toLowerCase()),
+				data
+			].sort((a: IDatabaseWord, b: IDatabaseWord) => a.word.localeCompare(b.word))
+
+			return {
+				...state,
+				_data: newData,
+				data: applyDatabaseFilters(state.filters, newData),
+				isLoading: false,
+				isLoaded: true,
+				isFailed: false,
+				error: null
+			}
+		})
+
+		.addCase(DeleteWordAction, (state, action) => {
+			const { payload } = action
+
+			const { data } = payload
+
+			const newData = [...state._data.filter((word) => word.word.trim().toLowerCase() !== data.trim().toLowerCase())].sort(
+				(a: IDatabaseWord, b: IDatabaseWord) => a.word.localeCompare(b.word)
+			)
+
+			return {
+				...state,
+				_data: newData,
+				data: applyDatabaseFilters(state.filters, newData),
 				isLoading: false,
 				isLoaded: true,
 				isFailed: false,

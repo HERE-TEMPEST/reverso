@@ -7,3 +7,16 @@ export const saveDatabase = async ({ database }: { database: Array<IDatabaseWord
 
 	return
 }
+
+export const addNewWord = async ({ word }: { word: IDatabaseWord }): Promise<any> => {
+	console.log({ word })
+	return apiInstance.post(uris.posts.saveDatabase, [word])
+}
+
+export const deleteWord = async ({ word }: { word: string }): Promise<any> => {
+	return apiInstance.delete(uris.delete.deleteWord, {
+		params: {
+			word
+		}
+	})
+}

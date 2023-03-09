@@ -2,19 +2,19 @@ import React from 'react'
 
 import { Modal } from '@shared/ui'
 
-import { InfoState, createProjectValidationSchema, initialState, actionHandler } from '../../model'
+import { InfoState, initialState, actionHandler, addNewWordValidationSchema } from '../../model'
 
 import styles from './Modal.module.scss'
 import { convertPost, POST, posts } from '../../model/enums/pos'
-import { animacies, convertAnimacy } from '../../model/enums/animacy'
-import { cases, convertCase } from '../../model/enums/case'
-import { convertGender, genders } from '../../model/enums/gender'
-import { convertMood, moods } from '../../model/enums/mood'
-import { convertNumber, numbers } from '../../model/enums/number'
-import { convertPerson, persons } from '../../model/enums/person'
-import { convertTense, tenses } from '../../model/enums/tense'
-import { convertTransitivity, transitivities } from '../../model/enums/transitivity'
-import { convertVoice, voices } from '../../model/enums/voice'
+import { animacies, Animacy, convertAnimacy } from '../../model/enums/animacy'
+import { Case, cases, convertCase } from '../../model/enums/case'
+import { convertGender, Gender, genders } from '../../model/enums/gender'
+import { convertMood, Mood, moods } from '../../model/enums/mood'
+import { convertNumber, MNumber, numbers } from '../../model/enums/number'
+import { convertPerson, Person, persons } from '../../model/enums/person'
+import { convertTense, Tense, tenses } from '../../model/enums/tense'
+import { convertTransitivity, transitivities, Transitivity } from '../../model/enums/transitivity'
+import { convertVoice, Voice, voices } from '../../model/enums/voice'
 
 export interface CreateProjectModalProps {
 	onClose: () => void
@@ -23,9 +23,10 @@ export interface CreateProjectModalProps {
 interface FormaProps {
 	state: InfoState
 	setState: (state: Partial<InfoState>) => void
+	errors: Record<keyof InfoState, string | undefined> | null
 }
 
-const Forma = ({ state, setState }: FormaProps) => {
+const Forma = ({ state, setState, errors }: FormaProps) => {
 	/*
     "POS": "string",
     "animacy": "string",
@@ -50,7 +51,26 @@ const Forma = ({ state, setState }: FormaProps) => {
 				/>
 			</div>
 			<div className={styles.wrapper}>
-				<select value={state.POS} onChange={(e) => setState({ POS: e.target.value })} className={styles.searchInput}>
+				<select
+					value={state.POS}
+					onChange={(e) =>
+						setState({
+							POS: e.target.value as any,
+							amount: 0,
+							animacy: undefined,
+							case: undefined,
+							gender: undefined,
+							mood: undefined,
+							number: undefined,
+							person: undefined,
+							tense: undefined,
+							transitivity: undefined,
+							voice: undefined
+						})
+					}
+					defaultValue={POST.NOUN}
+					className={styles.searchInput}
+				>
 					<option defaultValue={''} defaultChecked>
 						Выберете часть речи
 					</option>
@@ -65,9 +85,10 @@ const Forma = ({ state, setState }: FormaProps) => {
 				<div className={styles.wrapper}>
 					<select
 						value={state.animacy}
-						onChange={(e) => setState({ animacy: e.target.value })}
+						onChange={(e) => setState({ animacy: e.target.value as any })}
 						className={styles.searchInput}
 						placeholder="Слово..."
+						defaultValue={Animacy.anim}
 					>
 						{animacies.map((value) => (
 							<option key={value} value={value}>
@@ -81,9 +102,10 @@ const Forma = ({ state, setState }: FormaProps) => {
 				<div className={styles.wrapper}>
 					<select
 						value={state.case}
-						onChange={(e) => setState({ case: e.target.value })}
+						onChange={(e) => setState({ case: e.target.value as any })}
 						className={styles.searchInput}
 						placeholder="Слово..."
+						defaultValue={Case.ablt}
 					>
 						{cases.map((value) => (
 							<option key={value} value={value}>
@@ -97,9 +119,10 @@ const Forma = ({ state, setState }: FormaProps) => {
 				<div className={styles.wrapper}>
 					<select
 						value={state.gender}
-						onChange={(e) => setState({ gender: e.target.value })}
+						onChange={(e) => setState({ gender: e.target.value as any })}
 						className={styles.searchInput}
 						placeholder="Слово..."
+						defaultValue={Gender.femn}
 					>
 						{genders.map((value) => (
 							<option key={value} value={value}>
@@ -113,9 +136,10 @@ const Forma = ({ state, setState }: FormaProps) => {
 				<div className={styles.wrapper}>
 					<select
 						value={state.mood}
-						onChange={(e) => setState({ mood: e.target.value })}
+						onChange={(e) => setState({ mood: e.target.value as any })}
 						className={styles.searchInput}
 						placeholder="Слово..."
+						defaultValue={Mood.impr}
 					>
 						{moods.map((value) => (
 							<option key={value} value={value}>
@@ -129,9 +153,10 @@ const Forma = ({ state, setState }: FormaProps) => {
 				<div className={styles.wrapper}>
 					<select
 						value={state.number}
-						onChange={(e) => setState({ number: e.target.value })}
+						onChange={(e) => setState({ number: e.target.value as any })}
 						className={styles.searchInput}
 						placeholder="Слово..."
+						defaultValue={MNumber.plur}
 					>
 						{numbers.map((value) => (
 							<option key={value} value={value}>
@@ -145,9 +170,10 @@ const Forma = ({ state, setState }: FormaProps) => {
 				<div className={styles.wrapper}>
 					<select
 						value={state.person}
-						onChange={(e) => setState({ person: e.target.value })}
+						onChange={(e) => setState({ person: e.target.value as any })}
 						className={styles.searchInput}
 						placeholder="Слово..."
+						defaultValue={Person['1per']}
 					>
 						{persons.map((value) => (
 							<option key={value} value={value}>
@@ -161,9 +187,10 @@ const Forma = ({ state, setState }: FormaProps) => {
 				<div className={styles.wrapper}>
 					<select
 						value={state.tense}
-						onChange={(e) => setState({ tense: e.target.value })}
+						onChange={(e) => setState({ tense: e.target.value as any })}
 						className={styles.searchInput}
 						placeholder="Слово..."
+						defaultValue={Tense.futr}
 					>
 						{tenses.map((value) => (
 							<option key={value} value={value}>
@@ -177,9 +204,10 @@ const Forma = ({ state, setState }: FormaProps) => {
 				<div className={styles.wrapper}>
 					<select
 						value={state.transitivity}
-						onChange={(e) => setState({ transitivity: e.target.value })}
+						onChange={(e) => setState({ transitivity: e.target.value as any })}
 						className={styles.searchInput}
 						placeholder="Слово..."
+						defaultValue={Transitivity.intr}
 					>
 						{transitivities.map((value) => (
 							<option key={value} value={value}>
@@ -193,9 +221,10 @@ const Forma = ({ state, setState }: FormaProps) => {
 				<div className={styles.wrapper}>
 					<select
 						value={state.voice}
-						onChange={(e) => setState({ voice: e.target.value })}
+						onChange={(e) => setState({ voice: e.target.value as any })}
 						className={styles.searchInput}
 						placeholder="Слово..."
+						defaultValue={Voice.actv}
 					>
 						{voices.map((value) => (
 							<option key={value} value={value}>
@@ -205,6 +234,7 @@ const Forma = ({ state, setState }: FormaProps) => {
 					</select>
 				</div>
 			)}
+			{errors && <div className={styles.errorMsg}>{errors.word ?? errors.POS}</div>}
 		</div>
 	)
 }
@@ -215,12 +245,12 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = React.memo(
 	return (
 		<Modal<InfoState, unknown>
 			handler={actionHandler}
-			validationSchema={createProjectValidationSchema}
+			validationSchema={addNewWordValidationSchema}
 			close={onClose}
 			submitButtonTitle="Сохранить"
 			initialState={initialState as any}
 		>
-			{({ changeState, state }) => <Forma setState={changeState} state={state} />}
+			{({ changeState, state, errors }) => <Forma errors={errors} setState={changeState} state={state} />}
 		</Modal>
 	)
 })

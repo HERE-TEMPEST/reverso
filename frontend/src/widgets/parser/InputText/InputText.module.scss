@@ -16,6 +16,17 @@
   }
 }
 
+.content {
+  display: flex;
+  height: fit-content;
+  .btns {
+    margin: 0;
+    align-self: flex-end;
+    margin-left: vw(10);
+    margin-bottom: vw(20);
+  }
+}
+
 .inputText {
   box-sizing: border-box;
   width: vw(1180);

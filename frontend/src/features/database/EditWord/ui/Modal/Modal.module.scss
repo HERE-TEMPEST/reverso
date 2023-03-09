@@ -1,0 +1,51 @@
+@import '../../../../../shared/styles/index.scss';
+
+.formaModal{
+  margin-top: vw(10);
+  margin-left: vw(20);
+  display: flex;
+  flex-direction: column;
+  gap: vw(5);
+  margin-bottom: vw(20);
+
+.wrapper {
+	width: vw(350);
+	height: vw(40);
+	display: flex;
+	align-items: center;
+  
+  background: #EDF1F8;
+  border: vw(2) solid #094D74;
+	border-radius: vw(20);
+
+  @include screen('mobile') {
+    width: vw_m(650);
+    border: vw_m(3) solid #094D74;
+    height: vw_m(70);
+    border-radius: vw_m(50);
+  }
+
+	.searchInput {
+		width: vw(300);
+		height: vw(40);
+		margin-left: vw(18);
+		border: none;
+
+		outline: none;
+		background-color: transparent;
+    color: #094D74;
+
+		font-weight: 400;
+		font-size: vw(16);
+		line-height: vw(20);
+
+    @include screen('mobile') {
+      width: vw_m(500);
+      height: vw_m(70);
+      margin-left: vw_m(40);
+      font-size: vw_m(40);
+      line-height: vw(42);  
+    }  
+	}
+}
+}
