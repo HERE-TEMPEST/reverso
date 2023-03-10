@@ -45,6 +45,8 @@ const Forma = ({ state, setState, errors }: FormaProps) => {
 		<div className={styles.formaModal}>
 			<div className={styles.wrapper}>
 				<input
+					disabled
+					style={{ opacity: 0.6 }}
 					value={state.word}
 					onChange={(e) => setState({ word: e.target.value })}
 					className={styles.searchInput}
