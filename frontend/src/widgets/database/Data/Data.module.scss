@@ -5,6 +5,18 @@
   flex-direction: column;
   height: fit-content;
 
+  .amountWords {
+    align-self: flex-end;
+    cursor: default;
+    margin-left: auto;
+    font-weight: 500;
+    font-size: vw(24);
+    line-height: vw(26);
+    font-style: normal;  
+    color: #759CD8;
+    margin-top: vw(10);
+    margin-right: vw(300);
+  }
 
   .features {
     display: flex;

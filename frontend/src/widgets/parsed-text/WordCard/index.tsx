@@ -19,6 +19,7 @@ export const WordCardWidget: React.FC<WordCardWidgetProps> = (props: WordCardWid
 		<div className={styles.wrapper}>
 			<div className={styles.content}>
 				<WordShortCard onClick={() => setOnEdit(true)} className={styles.word} state={state} />
+				<div className={styles.wordAmount}>{state.amount}</div>
 				<DeleteWordFeature word={state.word} className={styles.bin} />
 			</div>
 			<div className={styles.grayLine} />

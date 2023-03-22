@@ -1,1 +1,1 @@
-{"_default": {"1": {"word": "\u043a\u0430\u043a\u043e\u0439-\u0442\u043e", "amount": 1, "POS": "ADJF", "animacy": null, "case": "gent", "gender": "femn", "mood": null, "number": "sing", "person": null, "tense": null, "transitivity": null, "voice": null}, "2": {"word": "\u0442\u0435\u043a\u0441\u0442", "amount": 0, "POS": "VERB", "animacy": null, "case": null, "gender": null, "mood": null, "number": null, "person": null, "tense": null, "transitivity": null, "voice": "pssv"}}}
+{"_default": {}}
