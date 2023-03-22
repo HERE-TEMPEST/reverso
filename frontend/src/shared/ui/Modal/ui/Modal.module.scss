@@ -1,0 +1,135 @@
+@import '../../../../shared/styles/index.scss';
+
+.modal {
+	position: absolute;
+	z-index: 5;
+	background: transparentize(#141414, 0.6);
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	display: flex;
+	z-index: 1000;
+	align-items: center;
+	justify-content: center;
+
+	.loader {
+		margin-top: vw(800);
+	}
+
+	.modalWrapper {
+		margin: vh(100) auto;
+
+		display: flex;
+		width: vw(600);
+		height: vw(600);
+		border-radius: vw(10);
+		border: vw(4) solid white;
+		background-color: white;
+
+		.contentWrapper {
+			box-sizing: border-box;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+
+			.additional {
+				align-self: flex-end;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				width: 100%;
+				height: fit-content;
+
+				.statusUpdating {
+					cursor: default;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					width: vw(300);
+					height: vw(50);
+					margin: 0 vw(40) vw(35) vw(35);
+					border-radius: vw(10);
+				}
+
+				.success {
+					border: vw(2) solid rgba($color: teal, $alpha: 0.2);
+					background-color: rgba($color: teal, $alpha: 0.2);
+					color: teal;
+				}
+
+				.failure {
+					width: vw(350);
+					border: vw(2) solid rgba($color: #c93c3d, $alpha: 0.2);
+					background-color: rgba($color: #c93c3d, $alpha: 0.2);
+					color: #c93c3d;
+				}
+
+				.btns {
+					margin: 0 vw(40) vw(35) 0;
+					height: vw(45);
+					display: flex;
+
+          .btn {
+            height: vw(45);
+            width: vw(200);
+          }
+
+          .disabled {
+            opacity: 0.6;
+          }
+
+					.whiteButton {
+						margin-right: vw(18);
+						color: #868282;
+
+            height: vw(45);
+            width: vw(150);
+
+						background: #ffffff;
+						border: 1px solid #868282;
+					}
+				}
+			}
+		}
+
+		.navBar {
+			border-radius: vw(10);
+
+			display: flex;
+			flex-direction: column;
+
+			width: vw(280);
+			height: vw(800);
+
+			.btn {
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				padding-left: vw(15);
+				height: vw(100);
+				background: rgba(250, 250, 250, 0.7);
+				border-bottom: 0.5px solid #c1c1c1;
+				border-right: vw(4) solid white;
+
+				font-weight: 700;
+				font-size: vw(14);
+				line-height: vw(17);
+
+				color: rgba(0, 0, 0, 0.4);
+			}
+
+			.active {
+				color: rgba(0, 0, 0, 0.5);
+				background-color: white;
+				border-right: none;
+			}
+
+			.whiteZone {
+				height: 100%;
+				border-right: vw(4) solid white;
+			}
+		}
+	}
+}

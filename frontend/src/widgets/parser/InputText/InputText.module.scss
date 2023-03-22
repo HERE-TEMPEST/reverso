@@ -2,6 +2,8 @@
 
 
 .title {
+  cursor: default;
+
   height: fit-content;
   margin: vw(27) 0 0 vw(153);
   font-weight: 600;
@@ -13,6 +15,17 @@
     margin: vw_m(40) 0 0 vw(153);
     font-size: vw(70);
     line-height: vw(72);
+  }
+}
+
+.content {
+  display: flex;
+  height: fit-content;
+  .btns {
+    margin: 0;
+    align-self: flex-end;
+    margin-left: vw(10);
+    margin-bottom: vw(20);
   }
 }
 

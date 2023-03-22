@@ -1,0 +1,13 @@
+@import '../../../shared/styles/index.scss';
+
+.text {
+  width: vw(1200);
+  cursor: default;
+  margin-left: auto;
+  font-weight: 500;
+  font-size: vw(20);
+  line-height: vw(22);
+  font-style: normal;  
+  color: #759CD8;
+  margin: vw(50) 0 0 vw(50);
+}

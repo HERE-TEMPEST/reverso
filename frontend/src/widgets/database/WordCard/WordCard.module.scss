@@ -7,6 +7,16 @@
 
   gap: vw(8);
 
+  .content {
+    display: flex;
+    align-items: center;
+
+    .bin {
+      margin-left: auto;
+      margin-right: vw(30);
+    }
+  }
+
   .grayLine {
     margin: vw(8) 0 vw(8) 0;
     width: vw(1100);

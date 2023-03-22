@@ -30,4 +30,3 @@ just a db
 
 ## Launch backend with `uvicorn main:app --reload`
 ### Run with [http://127.0.0.1:8000/docs]
-

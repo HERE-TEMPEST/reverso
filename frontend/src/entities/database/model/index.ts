@@ -4,4 +4,4 @@ export * from './hooks'
 export * as databaseSelectors from './selectors'
 export type { IDatabaseWord } from './database-word.types'
 
-export { UpdateDatabaseWordInfoAction } from './actions'
+export { UpdateDatabaseWordInfoAction, AddNewWordAction, DeleteWordAction } from './actions'
