@@ -8,6 +8,10 @@ fastapi = "*"
 uvicorn = "*"
 pymorphy2 = "*"
 tinydb = "*"
+nltk = "*"
+spacy = "*"
+svgling = "*"
+cairosvg = "*"
 
 [dev-packages]
 

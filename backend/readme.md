@@ -28,5 +28,21 @@ just a db
 
 ### `pipenv install tinydb`
 
+## NLTK
+
+just a nltk
+
+### `pipenv install nltk`
+### `pipenv install svgling`
+### `pipenv install cairosvg`
+### `python -m nltk.downloader popular`
+
+## Spacy
+
+just a spacy
+
+### `pipenv install spacy`
+### `python -m spacy download ru_core_news_sm`
+
 ## Launch backend with `uvicorn main:app --reload`
 ### Run with [http://127.0.0.1:8000/docs]
