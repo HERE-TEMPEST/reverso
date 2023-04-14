@@ -10,6 +10,10 @@ export const menuLinks = [
 		link: appRoutes.parser.goto()
 	},
 	{
+		label: 'Парсер деревьев',
+		link: appRoutes.parseSentense.goto()
+	},
+	{
 		label: 'Справочник',
 		link: appRoutes.supports.goto()
 	}

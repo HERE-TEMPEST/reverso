@@ -5,9 +5,9 @@ import pymorphy2
 import nltk
 from fastapi.staticfiles import StaticFiles
 import svgling
-import cairosvg
+from cairosvg import svg2png
 
-
+import time
 import pathlib
 import spacy
 from spacy import displacy
@@ -245,7 +245,7 @@ def tree_from_sentences(sentences: List[Text]):
             if count < 3:
                 name = 'images/' + '_'.join(words[i] for i in range(min(len(words), 4))) + '_' + str(count) + '.png'
                 sv = tree2svg(t)
-                cairosvg.svg2png(sv.tostring(), write_to=name)
+                svg2png(sv.tostring(), write_to=name)
                 dict_1 = {}
                 dict_1['str'] = str(t)
                 dict_1['tree'] = TreePrettyPrinter(t).text()
@@ -267,8 +267,8 @@ def subtree_from_tree(tree: List[Text]):
         dict_1['tree'] = TreePrettyPrinter(_tr).text()
         sv = tree2svg(_tr)
 
-        name = 'images/' + '_'.join(words[i] for i in range(min(len(words), 4))) + '.png'
-        cairosvg.svg2png(sv.tostring(), write_to=name)
+        name = 'images/' + str(time.time())  + '.png'
+        svg2png(sv.tostring(), write_to=name)
         dict_1['path'] = name
         answer.append(dict_1)
     return {'msg': answer}

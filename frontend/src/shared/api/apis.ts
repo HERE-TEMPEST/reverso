@@ -4,9 +4,10 @@ export const uris = {
 	},
 	posts: {
 		parseText: '/text/post',
-		saveDatabase: '/db/post'
+		saveDatabase: '/db/post',
+		parseTree: '/sentence/post_tree'
 	},
-  delete: {
-    deleteWord: '/db/word/del'
-  }
+	delete: {
+		deleteWord: '/db/word/del'
+	}
 }
