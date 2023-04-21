@@ -53,6 +53,8 @@
     width: fit-content;
   }
 
+  overflow: scroll;
+
   margin: vw(4) 0 0 vw(130);
   padding: vw(30);
   background: #CFDAEC;
@@ -61,7 +63,6 @@
   font-size: vw(16);
 
   line-height: vw(19);
-  text-align: justify;
   word-spacing: vw(4);
   color: #094D74;
   white-space: pre-wrap;
