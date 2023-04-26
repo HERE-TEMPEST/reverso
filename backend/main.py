@@ -6,7 +6,7 @@ import nltk
 from fastapi.staticfiles import StaticFiles
 import svgling
 import cairosvg
-
+from wiki_ru_wordnet import WikiWordnet
 
 import pathlib
 import spacy
@@ -109,6 +109,10 @@ class Word(BaseModel):
 class Text(BaseModel):
     text: str
 
+class TwoWords(BaseModel):
+    word_1: str
+    word_2: str
+
 @app.get('/file/get')
 def get_words_from_file(file_path: str):
     try:
@@ -201,6 +205,7 @@ def tree_from_sentences(sentences: List[Text]):
         """
 
         for word in parsed_words:
+            # print(word['word'], word['POS'])
             if word['POS'] == "NOUN":
                 x = """N -> \'""" + word["word"] + '\'\n' # имя существительное
                 pre_grammar = pre_grammar + x
@@ -252,7 +257,7 @@ def tree_from_sentences(sentences: List[Text]):
                 dict_1['path'] = name
                 pre_answer.append(dict_1)
                 count = count + 1
-
+                print(TreePrettyPrinter(t).text())
         answer.append(pre_answer)
     return {'msg': answer}
 
@@ -272,3 +277,99 @@ def subtree_from_tree(tree: List[Text]):
         dict_1['path'] = name
         answer.append(dict_1)
     return {'msg': answer}
+
+@app.post('/words/inform')
+def get_new_info_about_words(sentences: List[Text]):
+    wikiwordnet = WikiWordnet()
+    graph = []
+    for sent in sentences:
+        words = get_words(sent.text, type=False)
+        print(words)
+
+        for word in words:
+            dict_1 = {}
+            dict_1['first'] = 'sentence'
+            dict_1['relation'] = 'part_of_sentence'
+            dict_1['second'] = word
+
+            graph.append(dict_1)
+
+            synsets = wikiwordnet.get_synsets(word)
+            synset1 = synsets[0]
+            synset1.get_words()
+
+            if len(synset1.get_words()):
+                for w in synset1.get_words():
+                    print(w.lemma())
+                    dict_1 = {}
+                    dict_1['first'] = word
+                    dict_1['relation'] = 'lemma'
+                    dict_1['second'] = w.lemma()
+
+                    graph.append(dict_1)
+
+            print('definition')
+            if len(synsets):
+                for synset in synsets:
+                    dict_1 = {}
+                    dict_1['first'] = word
+                    dict_1['relation'] = 'definition'
+                    dict_1['second'] = {w.definition() for w in synset.get_words()}
+
+                    graph.append(dict_1)
+
+            print('hypernym')   
+            if len(wikiwordnet.get_hypernyms(synset1)):
+                for hypernym in wikiwordnet.get_hypernyms(synset1):
+                    dict_1 = {}
+                    dict_1['first'] = word
+                    dict_1['relation'] = 'hypernym'
+                    dict_1['second'] = {w.lemma() for w in hypernym.get_words()}
+
+                    graph.append(dict_1)
+
+            print('hyponym')
+            if len(wikiwordnet.get_hyponyms(synset1)):    
+                for hyponym in wikiwordnet.get_hyponyms(synset1):
+                    dict_1 = {}
+                    dict_1['first'] = word
+                    dict_1['relation'] = 'hyponym'
+                    dict_1['second'] = {w.lemma() for w in hyponym.get_words()}
+
+                    graph.append(dict_1)
+    
+    words.append('sentence')
+    
+    return {'nodes': words, 'graph': graph}
+
+
+@app.post('/words/find_hyp')
+def only_for_two_words(words: TwoWords):
+    wikiwordnet = WikiWordnet()
+    graph = []
+    nodes = [words.word_1, words.word_2]
+
+    synset1 = wikiwordnet.get_synsets(words.word_1)[0]
+    synset2 = wikiwordnet.get_synsets(words.word_2)[0]
+
+    common_hypernyms = wikiwordnet.get_lowest_common_hypernyms(synset1, synset2)
+    if(len(common_hypernyms)):
+        for ch, dst1, dst2 in sorted(common_hypernyms, key=lambda x: x[1] + x[2]):
+            dict_1 = {}
+            dict_1['first'] = nodes
+            dict_1['relation'] = 'common_hypernyms'            
+            dict_1['second']= {c.lemma() for c in ch.get_words()}
+
+            graph.append(dict_1)
+
+    common_hyponyms = wikiwordnet.get_lowest_common_hyponyms(synset1, synset2)
+    if (len(common_hyponyms)):
+        for ch, dst1, dst2 in sorted(common_hyponyms, key=lambda x: x[1] + x[2]):
+            dict_1 = {}
+            dict_1['first'] = nodes
+            dict_1['relation'] = 'common_hyponyms'            
+            dict_1['second']= {c.lemma() for c in ch.get_words()}
+
+            graph.append(dict_1)
+
+    return {'nodes': nodes, 'graph': graph}
