@@ -11,6 +11,12 @@ export const appRoutes = {
 			return '/'
 		}
 	},
+	parseSentense: {
+		path: '/tree',
+		goto() {
+			return '/tree'
+		}
+	},
 	parsedText: {
 		path: 'parsed-text',
 		goto() {

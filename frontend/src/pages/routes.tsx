@@ -2,7 +2,7 @@ import { useRoutes } from 'react-router-dom'
 
 import { appRoutes } from '@shared/config'
 
-import { DatabasePage, ParsedTextPage, ParserPage, SupportsPage } from './components'
+import { DatabasePage, ParsedTextPage, ParserPage, SupportsPage, TreeParserPage } from './components'
 import { MainLayout } from './layouts'
 
 export const GenerateRoutes = () => {
@@ -14,6 +14,10 @@ export const GenerateRoutes = () => {
 				{
 					index: true,
 					element: <ParserPage />
+				},
+				{
+					path: appRoutes.parseSentense.path,
+					element: <TreeParserPage />
 				},
 				{
 					path: appRoutes.database.path,
