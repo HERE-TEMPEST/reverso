@@ -89,6 +89,14 @@ def parse_words(words, type = True): #words: dict or list
                                 'number': p_word.number, 'person': p_word.person, 'tense': p_word.tense, 'transitivity': p_word.transitivity, 'voice': p_word.voice})
     return parsed_words
 
+def to_normal(words: List):
+    normal_words = []
+    for word in words:
+        n_word = morph.parse(word)[0].normal_form
+        normal_words.append(n_word)
+
+    return normal_words
+    
 def tree2svg(t):
     img = svgling.draw_tree(t)
     svg_data = img.get_svg()
@@ -274,7 +282,7 @@ def subtree_from_tree(tree: List[Text]):
         dict_1['tree'] = TreePrettyPrinter(_tr).text()
         sv = tree2svg(_tr)
 
-        name = 'images/' + str(time.time())  + '.png'
+        name = 'images/' + str(time.time())+ '.png'
         svg2png(sv.tostring(), write_to=name)
         dict_1['path'] = name
         answer.append(dict_1)
@@ -286,20 +294,25 @@ def get_new_info_about_words(sentences: List[Text]):
     graph = []
     for sent in sentences:
         words = get_words(sent.text, type=False)
+        normal_words = to_normal(words)
         print(words)
+        print(normal_words)
 
-        for word in words:
+        for word in normal_words:
             dict_1 = {}
             dict_1['first'] = 'sentence'
             dict_1['relation'] = 'part_of_sentence'
             dict_1['second'] = word
 
             graph.append(dict_1)
-
-            synsets = wikiwordnet.get_synsets(word)
-            synset1 = synsets[0]
-            synset1.get_words()
-
+            
+            try:
+                synsets = wikiwordnet.get_synsets(word)
+                synset1 = synsets[0]
+                synset1.get_words()
+            except IndexError:
+                return {'msg': 'Something is happend wrong', 'word': words[normal_words.index(word)]}
+            
             if len(synset1.get_words()):
                 for w in synset1.get_words():
                     print(w.lemma())
@@ -320,7 +333,7 @@ def get_new_info_about_words(sentences: List[Text]):
 
                     graph.append(dict_1)
 
-            print('hypernym')   
+            print('hypernym' != 0)   
             if len(wikiwordnet.get_hypernyms(synset1)):
                 for hypernym in wikiwordnet.get_hypernyms(synset1):
                     dict_1 = {}
@@ -350,25 +363,26 @@ def only_for_two_words(words: TwoWords):
     wikiwordnet = WikiWordnet()
     graph = []
     nodes = [words.word_1, words.word_2]
+    normal_nodes = to_normal(nodes)
 
-    synset1 = wikiwordnet.get_synsets(words.word_1)[0]
-    synset2 = wikiwordnet.get_synsets(words.word_2)[0]
+    synset1 = wikiwordnet.get_synsets(normal_nodes[0])[0]
+    synset2 = wikiwordnet.get_synsets(normal_nodes[1])[0]
 
     common_hypernyms = wikiwordnet.get_lowest_common_hypernyms(synset1, synset2)
-    if(len(common_hypernyms)):
+    if len(common_hypernyms):
         for ch, dst1, dst2 in sorted(common_hypernyms, key=lambda x: x[1] + x[2]):
             dict_1 = {}
-            dict_1['first'] = nodes
+            dict_1['first'] = normal_nodes
             dict_1['relation'] = 'common_hypernyms'            
             dict_1['second']= {c.lemma() for c in ch.get_words()}
 
             graph.append(dict_1)
 
     common_hyponyms = wikiwordnet.get_lowest_common_hyponyms(synset1, synset2)
-    if (len(common_hyponyms)):
+    if len(common_hyponyms):
         for ch, dst1, dst2 in sorted(common_hyponyms, key=lambda x: x[1] + x[2]):
             dict_1 = {}
-            dict_1['first'] = nodes
+            dict_1['first'] = normal_nodes
             dict_1['relation'] = 'common_hyponyms'            
             dict_1['second']= {c.lemma() for c in ch.get_words()}
 
