@@ -11,6 +11,18 @@ export const appRoutes = {
 			return '/'
 		}
 	},
+	dependencies: {
+		path: '/dependencies',
+		goto() {
+			return '/dependencies'
+		}
+	},
+	wordDependencies: {
+		path: '/word-dependencies',
+		goto() {
+			return '/word-dependencies'
+		}
+	},
 	parseSentense: {
 		path: '/tree',
 		goto() {

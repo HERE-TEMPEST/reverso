@@ -14,6 +14,14 @@ export const menuLinks = [
 		link: appRoutes.parseSentense.goto()
 	},
 	{
+		label: 'Граф предложения',
+		link: appRoutes.dependencies.goto()
+	},
+	{
+		label: 'Зависимости слов',
+		link: appRoutes.wordDependencies.goto()
+	},
+	{
 		label: 'Справочник',
 		link: appRoutes.supports.goto()
 	}

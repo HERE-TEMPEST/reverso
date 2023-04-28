@@ -1,0 +1,17 @@
+@import '../../../shared/styles/index.scss';
+
+.settingsPanel {
+  margin: 0 auto;
+  margin-top: vw(15);
+  height: fit-content;
+}
+
+.graphSandbox {
+  margin: 0 auto;
+  margin-top: vw(15);
+  overflow: hidden;
+  border-radius: 20px;
+  width: vw(1180);
+  height: vw(480);
+  border: 2px solid teal;
+}
