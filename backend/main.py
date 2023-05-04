@@ -24,7 +24,8 @@ from nltk.parse.recursivedescent import RecursiveDescentParser
 from nltk.grammar import CFG
 from nltk.tree import *
 from nltk.tree.prettyprinter import TreePrettyPrinter
-from utils import ConnectionManager 
+
+from utils import ConnectionManager, MessageListener, MessageResponseLoop
 
 from collections import Counter
 
@@ -393,15 +394,20 @@ def only_for_two_words(words: TwoWords):
     return {'nodes': nodes, 'graph': graph}
 
 manager = ConnectionManager()
+messageListener = MessageListener()
+messageLoop =  MessageResponseLoop(manager, messageListener)
+messageListener.setLoop(messageLoop)
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     id = uuid4()
     try:
       await websocket.accept()
+      manager.connect(websocket, id)
       while True:
         data = await websocket.receive_text()
         print("message from", id)
-        await websocket.send_text(f"Message text was: {data} from ")
+        await messageLoop.handleMessage(id, data)
     except WebSocketDisconnect:
+      manager.disconnect(id)
       print("client disconnected")

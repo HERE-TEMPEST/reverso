@@ -1,32 +1,23 @@
 from agents import AgentBase, agents
 from typing import List
 
-class Message:
-  id: str
-  message: str
-
-  def __init__(self, id: str, message: str):
-    self.id = id
-    self.message = message
-
-class Response:
-  id: str
-  message: str
-
-  def __init__(self, id: str, message: str):
-    self.id = id
-    self.message = message
-
+from .message_loop import MessageResponseLoop
+from .interfaces import Message, Response
 
 class MessageListener:
   agents: List[AgentBase]
   
   def __init__(self):
     self.agents = agents
+    self.loop: MessageResponseLoop = None
+  
+  def setLoop(self, messageResponseLoop: MessageResponseLoop):
+    self.loop = messageResponseLoop
 
-  def done(self, response: Response):
+
+  async def done(self, response: Response):
     print(response.message)
-    pass
+    await self.loop.handleResponse(response)
 
   async def execute(self, message: Message):
     id = message.id

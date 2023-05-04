@@ -1,4 +1,4 @@
-from agnet_base import AgentBase
+from .agnet_base import AgentBase
 
 class ExampleAgent(AgentBase):
   def __init__(self):
