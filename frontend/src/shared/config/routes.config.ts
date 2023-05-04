@@ -5,6 +5,12 @@ export const appRoutes = {
 			return '/database'
 		}
 	},
+	bot: {
+		path: 'bot',
+		goto() {
+			return '/bot'
+		}
+	},
 	parser: {
 		path: '/',
 		goto() {

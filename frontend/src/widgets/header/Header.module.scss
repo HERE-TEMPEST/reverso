@@ -8,7 +8,6 @@
 	grid-column-end: 3;
 	z-index: 1;
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
 
   @include screen('mobile') {
@@ -43,6 +42,22 @@
       }  
     }
 	}
+
+  .botIcon {
+    margin-left: auto;
+    cursor: pointer;
+    margin-right: vw(40);
+    width: vw(24);
+    height: vw(24);
+
+    svg {
+      path {
+        fill: #094D74;
+      }
+      width: vw(24);
+      height: vw(24);  
+    }
+  }
 
   .burgerMenuIcon {
     cursor: pointer;

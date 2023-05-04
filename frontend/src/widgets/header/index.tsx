@@ -19,6 +19,9 @@ export const Header = () => {
 			<Link to={appRoutes.base.goto()} className={styles.logo}>
 				<img src={ReversoLogo} alt="" />
 			</Link>
+			<Link to={appRoutes.bot.goto()} className={styles.botIcon}>
+				<Icon type="bot" />
+			</Link>
 			<div className={styles.burgerMenuIcon} onClick={() => setIsOpenedBurgerMenu(true)}>
 				<Icon type="burger-menu" />
 			</div>

@@ -2,7 +2,15 @@ import { useRoutes } from 'react-router-dom'
 
 import { appRoutes } from '@shared/config'
 
-import { DatabasePage, DependenciesPage, ParsedTextPage, ParserPage, SupportsPage, TreeParserPage } from './components'
+import {
+	BotPage,
+	DatabasePage,
+	DependenciesPage,
+	ParsedTextPage,
+	ParserPage,
+	SupportsPage,
+	TreeParserPage
+} from './components'
 import { MainLayout } from './layouts'
 import { WordDependenciesPage } from './components/WordDependencies'
 
@@ -15,6 +23,10 @@ export const GenerateRoutes = () => {
 				{
 					index: true,
 					element: <ParserPage />
+				},
+				{
+					path: appRoutes.bot.path,
+					element: <BotPage />
 				},
 				{
 					path: appRoutes.parseSentense.path,

@@ -1,0 +1,74 @@
+@import '../../../shared/styles/index.scss';
+
+.wrapper {
+  width: vw(700);
+  height: vw(600);
+  margin-bottom: vw(20);
+  // border: vw(2) solid teal;
+  padding: vw(10);
+  overflow-y: scroll;
+
+  display: flex;
+  flex-direction: column;
+  gap: vw(15);
+  
+  .person {
+    margin-left: auto;
+    flex-direction: row-reverse;
+  
+    .messageBody {
+      margin: vw(5) 0 0 vw(10);
+      
+      .who {
+        margin-left: auto;
+      }
+
+      .mBody {
+        margin: vw(5) vw(10) 0 0 !important;
+        text-align: end !important;
+      }
+    }
+  }
+
+  .messageWrapper {
+    width: fit-content;
+    height: fit-content;
+    margin: vw(10) 0 vw(10) o;
+    display: flex;
+
+    
+    .avatar {
+      width: vw(40);
+      height: vw(40);
+
+      img {
+        width: vw(40);
+        height: vw(40);
+      }
+    }
+
+    .messageBody {
+      margin: vw(5) 0 0 vw(10);
+      display: flex;
+      flex-direction: column;
+
+      .who {
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 19px;
+        color: #094D74;
+      }
+
+      .mBody {
+        word-wrap: break-word;
+        width: vw(400);
+        margin: vw(5) 0 0 vw(10);
+        text-align: start;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 19px;
+        color: #094D74;
+      }
+    }
+  }
+}
