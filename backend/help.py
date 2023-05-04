@@ -30,7 +30,10 @@ def get_words(lines, type=True, lang = 'ru'):
         line1 = re.findall(r'[А-яЁё][а-яё\-]*', lines)
         line2 = re.findall(r'[A-z0-9][A-z0-9\-]*', lines)
         for word in line1:
-            words.append(word.lower())
+            if word == ('больше' or 'меньше' or 'позже' or 'раньше'):
+                words_en.append(word)
+            else:
+                words.append(word.lower())
         for word in line2:
             words_en.append(word)
         return words, words_en
