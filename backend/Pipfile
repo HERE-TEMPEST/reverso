@@ -13,6 +13,7 @@ spacy = "*"
 svgling = "*"
 cairosvg = "*"
 websockets = "*"
+wiki-ru-wordnet = "*"
 
 [dev-packages]
 
