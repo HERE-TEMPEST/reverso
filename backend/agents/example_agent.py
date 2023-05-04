@@ -4,5 +4,6 @@ class ExampleAgent(AgentBase):
   def __init__(self):
     super().__init__()
 
-  def execute(self, input: str) -> str:
+  def execute(self, input_str: str) -> str:
+    print('one more')
     return "Hello!"

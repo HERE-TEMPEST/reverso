@@ -1,6 +1,6 @@
 from .agnet_base import AgentBase, pd
 
-class FindAnimeAgent(AgentBase):
+class FindAnimeAgentRaiting(AgentBase):
   def __init__(self):
     super().__init__()
 
@@ -10,7 +10,7 @@ class FindAnimeAgent(AgentBase):
       if not input_str:
         return 'Извините, не могу обработать Ваш запрос. Возможно, Вы ввели цифры буквами. Попробуйте еще раз.'
 
-      titles = self.df[self.df['eps'] > float(input_str[0])]
+      titles = self.df[self.df['rating'] > float(input_str[0])]
       titles = titles.sort_values('rating')
       titles = titles.head()
       titles = list(titles['title'])
@@ -20,7 +20,7 @@ class FindAnimeAgent(AgentBase):
       if not input_str:
         return 'Извините, не могу обработать Ваш запрос. Возможно, Вы ввели цифры буквами. Попробуйте еще раз.'
 
-      titles = self.df[self.df['eps'] < float(input_str[0])]
+      titles = self.df[self.df['rating'] < float(input_str[0])]
       titles = titles.sort_values('rating')
       titles = titles.head()
       titles = list(titles['title'])
@@ -29,12 +29,12 @@ class FindAnimeAgent(AgentBase):
       return 'Извините, не могу обработать Ваш запрос. Возможно, Вы ввели цифры буквами. Попробуйте еще раз.'
 
     else:
-      titles = self.df[self.df['eps'] == float(input_str[0])]
+      titles = self.df[self.df['rating'] == float(input_str[0])]
       titles = titles.sort_values('rating')
       titles = titles.head()
       titles = list(titles['title'])
 
-    answer = (f'Топ-5 аниме с количеством серий {input_str[0]}: ')
+    answer = (f'Топ-5 аниме с рейтингом {input_str[0]}: ')
     for item in titles:
       answer += (item + ', ')
     return answer

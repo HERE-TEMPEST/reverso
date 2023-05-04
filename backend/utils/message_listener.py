@@ -13,8 +13,39 @@ class MessageListener:
   def __init__(self):
     self.agents = agents
     self.loop: MessageResponseLoop = None
-    self.keywords = ['аниме', 'серия', 'сериал', 'фильм', 'рейтинг', 'жанр', 'тег', 'описание', 'правда', 'яой']
+
+    self.commands = {
+      ('аниме', 'серия'): self.agents[1].execute, #FindAnimeAgent
+      ('аниме', 'рейтинг'): self.agents[3].execute, #FindAnimeAgentRaiting
+      ('аниме', 'жанр'): self.agents[4].execute, #FindAnimeAgentGenre
+      ('аниме', 'год'): self.agents[5].execute, #FindAnimeAgentYear
+      ('яой'): self.agents[2].execute #SurpriseAgent
+    }
   
+  def executeAgent(self, input_string: list, *args: list):
+    answer = 'Привет'
+    for keys in self.commands.keys():
+      check = []
+      if type(keys) is tuple:
+        for key in keys:
+          print(key)
+          if key in input_string:
+            check.append(1)
+          else:
+            check.append(0)
+      else:
+        if keys in input_string:
+            check.append(1)
+        else:
+          check.append(0)
+
+      if all(check):
+        answer = self.commands[keys](*args)
+        return answer
+      else:
+        answer = 'Не могу ответить на вопрос'
+        
+
   def setLoop(self, messageResponseLoop: MessageResponseLoop):
     self.loop = messageResponseLoop
 
@@ -29,22 +60,11 @@ class MessageListener:
 
     words, words_en = get_words(body, False, 'en')
     words = to_normal(words)
-    
-    keywords = []
-    for word in words:
-      if word in self.keywords:
-        keywords.append(word)
-
-    keywords = keywords.sort()
-
-    print('ключевые: ', keywords,' все русские слова: ', words, 'все английские слова и цифры',  words_en)
 
     answer = ''
-
-    if body == 'яой':
-      answer = 'Держи ссылку на прекрасное аниме: https://anime-go.online/195-skuchnyj-mir-gde-ne-suschestvuet-samoj-idei-pohabnyh-shutok.html'
-    else:
-      answer = 'Попробуй найти пасхалку'
+    answer = self.executeAgent(words, words_en)
+    
+    # answer = 'что-то пошло не так'
 
     response = Response(id, answer)
     await self.done(response)
