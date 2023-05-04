@@ -12,6 +12,7 @@ nltk = "*"
 spacy = "*"
 svgling = "*"
 cairosvg = "*"
+websockets = "*"
 
 [dev-packages]
 

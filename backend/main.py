@@ -8,12 +8,13 @@ import svgling
 import cairosvg
 from wiki_ru_wordnet import WikiWordnet
 from cairosvg import svg2png
+from uuid import uuid4
 
 import time
 import pathlib
 import spacy
 from spacy import displacy
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
 from tinydb import TinyDB, Query
 from typing import List
@@ -23,6 +24,7 @@ from nltk.parse.recursivedescent import RecursiveDescentParser
 from nltk.grammar import CFG
 from nltk.tree import *
 from nltk.tree.prettyprinter import TreePrettyPrinter
+from utils import ConnectionManager 
 
 from collections import Counter
 
@@ -389,3 +391,17 @@ def only_for_two_words(words: TwoWords):
             graph.append(dict_1)
 
     return {'nodes': nodes, 'graph': graph}
+
+manager = ConnectionManager()
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    id = uuid4()
+    try:
+      await websocket.accept()
+      while True:
+        data = await websocket.receive_text()
+        print("message from", id)
+        await websocket.send_text(f"Message text was: {data} from ")
+    except WebSocketDisconnect:
+      print("client disconnected")
