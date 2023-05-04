@@ -1,10 +1,8 @@
 from typing import Union
 
 import re
-import pymorphy2
 import nltk
 from fastapi.staticfiles import StaticFiles
-import svgling
 import cairosvg
 from wiki_ru_wordnet import WikiWordnet
 from cairosvg import svg2png
@@ -16,7 +14,6 @@ import spacy
 from spacy import displacy
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
-from tinydb import TinyDB, Query
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -27,12 +24,12 @@ from nltk.tree.prettyprinter import TreePrettyPrinter
 
 from utils import ConnectionManager, MessageListener, MessageResponseLoop
 
+
+from help import get_words, parse_words, to_normal, tree2svg, db, check
+
 from collections import Counter
 
 app = FastAPI()
-morph = pymorphy2.MorphAnalyzer()
-db = TinyDB('./db.json')
-check = Query()
 nlp = spacy.load("ru_core_news_sm")
 
 app.mount("/images", StaticFiles(directory="images"), name="images")
@@ -49,61 +46,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-def get_words(lines, type=True):
-    words = []
-    if type:
-        lines : list
-        for line in lines:
-            line1 = re.findall(r'[А-яЁё][А-яё\-]*', line)
-            for word in line1:
-                words.append(word.lower())
-
-    else:
-        lines : str
-        line1 = re.findall(r'[А-яЁё][а-яё\-]*', lines)
-        for word in line1:
-            words.append(word.lower())
-
-    return words
-
-
-def parse_words(words, type = True): #words: dict or list
-    parsed_words = []
-    if type:
-        words : dict
-        for word in words.keys():
-            if db.search(check.word == word):
-                db.update({'amount': words[word]}, check.word == word)
-                parsed_words.append(db.search(check.word == word)[0])
-            else: 
-                p_word = morph.parse(word)[0].tag
-                parsed_words.append({'word': word, 'amount': words[word],'POS': p_word.POS, 'animacy': p_word.animacy, 'case': p_word.case, 'gender': p_word.gender, 'mood': p_word.mood,
-                                'number': p_word.number, 'person': p_word.person, 'tense': p_word.tense, 'transitivity': p_word.transitivity, 'voice': p_word.voice})
-    
-    else:
-        words : list
-        for word in words:
-            if db.search(check.word == word):
-                parsed_words.append(db.search(check.word == word)[0])
-            else:
-                p_word = morph.parse(word)[0].tag
-                parsed_words.append({'word': word, 'amount': 1,'POS': p_word.POS, 'animacy': p_word.animacy, 'case': p_word.case, 'gender': p_word.gender, 'mood': p_word.mood,
-                                'number': p_word.number, 'person': p_word.person, 'tense': p_word.tense, 'transitivity': p_word.transitivity, 'voice': p_word.voice})
-    return parsed_words
-
-def to_normal(words: List):
-    normal_words = []
-    for word in words:
-        n_word = morph.parse(word)[0].normal_form
-        normal_words.append(n_word)
-
-    return normal_words
-    
-def tree2svg(t):
-    img = svgling.draw_tree(t)
-    svg_data = img.get_svg()
-    return svg_data
 
 class Word(BaseModel):
     word: str
