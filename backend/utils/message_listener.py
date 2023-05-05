@@ -19,7 +19,8 @@ class MessageListener:
       ('аниме', 'рейтинг'): self.agents[3].execute, #FindAnimeAgentRaiting
       ('аниме', 'жанр'): self.agents[4].execute, #FindAnimeAgentGenre
       ('аниме', 'год'): self.agents[5].execute, #FindAnimeAgentYear
-      ('яой'): self.agents[2].execute #SurpriseAgent
+      ('яой'): self.agents[2].execute, #SurpriseAgent
+      ('привет'): self.agents[0].execute, #ExampleAgent
     }
   
   def executeAgent(self, input_string: list, *args: list):
@@ -44,6 +45,8 @@ class MessageListener:
         return answer
       else:
         answer = 'Не могу ответить на вопрос'
+        
+    return answer
         
 
   def setLoop(self, messageResponseLoop: MessageResponseLoop):

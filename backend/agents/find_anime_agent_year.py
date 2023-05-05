@@ -34,7 +34,7 @@ class FindAnimeAgentYear(AgentBase):
         titles = titles.sort_values('rating')
         titles = titles.head()
         titles = list(titles['title'])
-      except:
+      except ValueError:
         input_str = " ".join(input_str)
         titles = self.df[self.df['title'] == input_str].reset_index()
         titles = int(titles['startYr'][0])
