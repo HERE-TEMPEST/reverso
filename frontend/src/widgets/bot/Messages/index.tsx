@@ -1,3 +1,5 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable react/jsx-key */
 import React, { useEffect, useRef } from 'react'
 import styles from './Messages.module.scss'
 
@@ -23,7 +25,18 @@ const MessageWidget = (props: MessageWidgetProps) => {
 			</div>
 			<div className={styles.messageBody}>
 				<div className={styles.who}>{message.who}</div>
-				<div className={styles.mBody}>{message.message}</div>
+				<div className={styles.mBody}>
+					{message.message.split(' ').map((word) =>
+						word.includes('http') ? (
+							<a href={word} target="_blank" rel="noreferrer">
+								{' '}
+								ссылка
+							</a>
+						) : (
+							` ${word}`
+						)
+					)}
+				</div>
 			</div>
 		</div>
 	)

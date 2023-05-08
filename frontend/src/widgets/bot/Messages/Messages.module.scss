@@ -60,7 +60,16 @@
       }
 
       .mBody {
-        word-wrap: break-word;
+
+        word-break: break-word;
+        white-space: pre-line;
+        overflow-wrap: break-word;
+        -ms-word-break: break-word;
+        word-break: break-word;
+        
+        display: inline-block;
+        word-break: break-word !important;
+        word-wrap: break-word !important;
         width: vw(400);
         margin: vw(5) 0 0 vw(10);
         text-align: start;

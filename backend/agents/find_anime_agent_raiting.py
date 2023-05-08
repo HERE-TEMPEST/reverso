@@ -29,12 +29,19 @@ class FindAnimeAgentRaiting(AgentBase):
       return 'Извините, не могу обработать Ваш запрос. Возможно, Вы ввели цифры буквами. Попробуйте еще раз.'
 
     else:
-      titles = self.df[self.df['rating'] == float(input_str[0])]
-      titles = titles.sort_values('rating')
-      titles = titles.head()
-      titles = list(titles['title'])
+      try:
+        titles = self.df[self.df['rating'] == float(input_str[0])]
+        titles = titles.sort_values('rating')
+        titles = titles.head()
+        titles = list(titles['title'])
+      except :
+        input_str = " ".join(input_str)
+        titles = self.df[self.df['title'] == input_str].reset_index()
+        titles = int(titles['rating'][0])
+        return f'Рейтинг выбранного аниме {input_str}: {titles}'
 
     answer = (f'Топ-5 аниме с рейтингом {input_str[0]}: ')
+
     for item in titles:
       answer += (item + ', ')
     return answer

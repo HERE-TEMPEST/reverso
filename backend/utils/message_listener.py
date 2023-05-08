@@ -21,6 +21,16 @@ class MessageListener:
       ('аниме', 'год'): self.agents[5].execute, #FindAnimeAgentYear
       ('яой'): self.agents[2].execute, #SurpriseAgent
       ('привет'): self.agents[0].execute, #ExampleAgent
+      ('добрый', 'день'): self.agents[0].execute, #ExampleAgent
+      ('добрый', 'вечер'): self.agents[0].execute, #ExampleAgent
+      ('добрый', 'утро'): self.agents[0].execute, #ExampleAgent
+      ('салют'): self.agents[0].execute, #ExampleAgent
+      ('халло'): self.agents[0].execute, #ExampleAgent
+      ('хай'): self.agents[0].execute, #ExampleAgent
+      ('жалко'): self.agents[6].execute, #PittyAgent
+      ('помощь'): self.agents[7].execute, #HelpAgent
+      ('помочь'): self.agents[7].execute, #HelpAgent
+      ('что', 'уметь'): self.agents[7].execute, #HelpAgent
     }
   
   def executeAgent(self, input_string: list, *args: list):
@@ -44,7 +54,7 @@ class MessageListener:
         answer = self.commands[keys](*args)
         return answer
       else:
-        answer = 'Не могу ответить на вопрос'
+        answer = 'Не могу ответить на вопрос, я еще учусь... Но скорее всего не научусь...'
         
     return answer
         

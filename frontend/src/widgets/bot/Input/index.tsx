@@ -16,8 +16,27 @@ export const InputMessageWidget = (props: InputMessageWidgetProps) => {
 
 	return (
 		<div className={styles.wrapper}>
-			<input value={message} onChange={(e) => setMessage(e.target.value)} className={styles.searchInput} />
-			<div onClick={() => (onSendMessage(message), setMessage(''))} className={styles.searchLoupe}>
+			<input
+				value={message}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter') {
+						if (message.trim() !== '') {
+							onSendMessage(message)
+							setMessage('')
+						}
+					}
+				}}
+				onChange={(e) => setMessage(e.target.value)}
+				className={styles.searchInput}
+			/>
+			<div
+				onClick={() => {
+					if (message.trim() !== '') {
+						onSendMessage(message), setMessage('')
+					}
+				}}
+				className={styles.searchLoupe}
+			>
 				<Icon type="send-message" />
 			</div>
 		</div>

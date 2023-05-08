@@ -10,20 +10,32 @@ export const BotPage = () => {
 	const websocketRef = useRef<WebSocket | null>(null)
 
 	useEffect(() => {
-		websocketRef.current = new WebSocket(`ws://${apiConfig.host}:${apiConfig.port}/ws`)
+		const connectAndListen = () => {
+			if (!websocketRef.current || (websocketRef.current && websocketRef.current.readyState !== WebSocket.OPEN)) {
+				websocketRef.current = new WebSocket(`ws://${apiConfig.host}:${apiConfig.port}/ws`)
 
-		websocketRef.current.onmessage = (event: MessageEvent<any>) => {
-			setMessages((_messages) => [
-				..._messages,
-				{
-					message: event.data,
-					who: 'Bot'
+				websocketRef.current.onmessage = async (event: MessageEvent<any>) => {
+					await new Promise((r) => setTimeout(r, 1000))
+
+					setMessages((_messages) => [
+						..._messages,
+						{
+							message: event.data,
+							who: 'Bot'
+						}
+					])
 				}
-			])
+
+				websocketRef.current.onopen = () => {
+					console.log('connection opened')
+				}
+			}
 		}
 
-		websocketRef.current.onopen = () => {
-			console.log('connection opened')
+		const timeoutId = setInterval(connectAndListen, 500)
+
+		return () => {
+			clearInterval(timeoutId)
 		}
 	}, [])
 
