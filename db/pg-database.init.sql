@@ -28,19 +28,6 @@ CREATE TABLE IF NOT EXISTS words (
 INSERT INTO users (login, password, provider, provider_id)
 VALUES ('test_login', 'pass1234', 'local', 'provider_test');
 
-INSERT INTO words (
-  word,
-  amount,
-  POS,
-  animacy,
-  "case",
-  gender,
-  mood,
-  "number",
-  person,
-  tense,
-  transitivity,
-  voice,
-  user_id
-)
-VALUES ('машина', 1, 'NOUN', 'inan', 'nomn', 'femn', NULL, 'sing', NULL, NULL, NULL, NULL, 1);
+INSERT INTO words ( word, amount, POS, animacy, "case", gender, mood, "number", person, tense, transitivity, voice, user_id)
+VALUES ('машина', 1, 'NOUN', 'inan', 'nomn', 'femn', NULL, 'sing', NULL, NULL, NULL, NULL, 1),
+        ('малина', 1, 'NOUN', 'inan', 'nomn', 'femn', NULL, 'sing', NULL, NULL, NULL, NULL, 1);
