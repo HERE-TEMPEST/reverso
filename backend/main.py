@@ -139,7 +139,7 @@ def login(user: Login):
         return{'user_id': user_id}
     else:
         user_id = records[0][0]
-    return{'user_id': user_id}
+        return {'user_id': user_id}
 
 @app.get('/file/get')
 def get_words_from_file(file_path: str):
@@ -210,11 +210,11 @@ def save_and_update_db(words: List[Word], user_id):
         
         if len(records) == 0:
             cur.execute(f"""INSERT INTO words ( word, amount, POS, animacy, "case", gender, mood, "number", person, tense, transitivity, voice, user_id)
-                        VALUES ('{word.word}', {word.amount}, '{word.POS}', '{word.animacy}', '{word.case}', '{word.gender}', '{word.mood}', '{word.number}', '{word.person}', '{word.tense}', '{word.transitivity}', '{word.voice}', '{int(user_id)}');
+                        VALUES ('{word.word}', {word.amount}, '{word.POS}', '{word.animacy}', '{word.case}', '{word.gender}', '{word.mood}', '{word.number}', '{word.person}', '{word.tense}', '{word.transitivity}', '{word.voice}', {int(user_id)});
                         """)
         else:
             cur.execute(f"""UPDATE words
-                            SET amount = {word.amount}, POS = '{word.POS}' animacy= '{word.animacy}', 'case' = '{word.case}', gender = '{word.gender}', mood ='{word.mood}',
+                            SET amount = {word.amount}, POS = '{word.POS},' animacy= '{word.animacy}', 'case' = '{word.case}', gender = '{word.gender}', mood ='{word.mood}',
                             'number'= '{word.number}', person = '{word.person}', tense = '{word.tense}', transitivity = '{word.transitivity}', voice = '{word.voice}'
                             WHERE word = '{word.word}' and user_id = {int(user_id)}""")
     return {'msg': 'db is updated, dude'}
@@ -222,7 +222,7 @@ def save_and_update_db(words: List[Word], user_id):
 @app.delete('/db/word/del')
 def delete_word(word: str, user_id):
     cur.execute(f"""SELECT word FROM words
-                WHERE word = '{word}' and {int(user_id)}""")
+                WHERE word = '{word}' and user_id={int(user_id)}""")
     records = cur.fetchall()
 
     if len(records) == 0:

@@ -5,7 +5,7 @@ import { apiInstance } from '../api-instance'
 import { uris } from '../apis'
 
 export const parseSentense = async (userId: any, { line }: { line: string }): Promise<any> => {
-	const { data } = await apiInstance.post(uris.posts.parseSentense, [
+	const { data } = await apiInstance.post(`${uris.posts.parseSentense}/?user_id=${userId}`, [
 		{
 			text: line
 		}
@@ -27,7 +27,7 @@ export const parseSentense = async (userId: any, { line }: { line: string }): Pr
 }
 
 export const findHy = async (userId: any, { word1, word2 }: { word1: string; word2: string }): Promise<any> => {
-	const { data } = await apiInstance.post(uris.posts.findHy, {
+	const { data } = await apiInstance.post(`${uris.posts.findHy}/?user_id=${userId}`, {
     "word_1": word1,
     "word_2": word2
   }, {
