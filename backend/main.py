@@ -99,6 +99,47 @@ class TwoWords(BaseModel):
     word_1: str
     word_2: str
 
+class Login(BaseModel):
+    login: str
+    password: str
+
+@app.get('/users')
+def get_users():
+    cur.execute(f"SELECT * FROM users")
+    records = cur.fetchall()
+    print(records)
+
+    db = {}
+    db_list =[]
+    for record in records:
+        word = {}
+        word['id'] = record[0]
+        word['login'] = record[1]
+        word['password'] = record[2]
+        word['provider'] = record[3]
+        word['provider_id'] = record[4]
+        db_list.append(word)
+    
+    db['db'] = db_list
+        
+    return {'db': db}
+
+@app.post('/login')
+def login(user: Login):
+    cur.execute(f"SELECT id FROM users WHERE login = '{user.login}' and password = '{user.password}'")
+    records = cur.fetchall()
+    print(records)
+    if len(records) == 0:
+        cur.execute(f"""INSERT INTO users (login, password, provider, provider_id)
+                        VALUES ('{user.login}', '{user.password}', 'local', NULL);"""
+                    )
+        cur.execute(f"SELECT id FROM users WHERE login = '{user.login}' and password = '{user.password}'")
+        records = cur.fetchall()
+        user_id = records[0][0]
+        return{'user_id': user_id}
+    else:
+        user_id = records[0][0]
+    return{'user_id': user_id}
 
 @app.get('/file/get')
 def get_words_from_file(file_path: str):
@@ -189,8 +230,7 @@ def delete_word(word: str, user_id):
     else:
         cur.execute(f"""DELETE FROM words
                     WHERE word = '{word}'""")
-        return {'msg': 'word is deleted'}
-       
+        return {'msg': 'word is deleted'}       
 
 @app.delete('/db/del')
 def clear_db():
@@ -368,7 +408,6 @@ def get_new_info_about_words(sentences: List[Text]):
     words.append('sentence')
     
     return {'nodes': words, 'graph': graph}
-
 
 @app.post('/words/find_hyp')
 def only_for_two_words(words: TwoWords):
