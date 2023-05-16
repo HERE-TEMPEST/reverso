@@ -1,10 +1,18 @@
 import { apiInstance } from '../api-instance'
 import { uris } from '../apis'
 
-export const parseText = async ({ text }: { text: string }) => {
+export const parseText = async (userId: any, { text }: { text: string }) => {
 	const newText = text.split('\n').join(' ').split('\r').join(' ')
 
-	const { data } = await apiInstance.post(uris.posts.parseText, { text: newText })
+	const { data } = await apiInstance.post(
+		uris.posts.parseText,
+		{ text: newText },
+		{
+			headers: {
+				'User-Id': userId
+			}
+		}
+	)
 
 	return data.words
 }

@@ -1,8 +1,11 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useRoutes } from 'react-router-dom'
 
 import { appRoutes } from '@shared/config'
 
 import {
+	AuthPage,
 	BotPage,
 	DatabasePage,
 	DependenciesPage,
@@ -13,8 +16,21 @@ import {
 } from './components'
 import { MainLayout } from './layouts'
 import { WordDependenciesPage } from './components/WordDependencies'
+import { useAppSelector } from '@shared/libs'
+import { authSelectors } from '@entities/auth'
 
 export const GenerateRoutes = () => {
+	const isAuth = useAppSelector(authSelectors.isAuth)
+
+	if (!isAuth) {
+		return useRoutes([
+			{
+				path: appRoutes.base.path,
+				element: <AuthPage />
+			}
+		])
+	}
+
 	return useRoutes([
 		{
 			path: appRoutes.base.path,

@@ -6,6 +6,7 @@ import { parseTextWordReducer } from '@features/parser'
 import { modalReducer } from '@shared/ui'
 import { treeParserReducer } from '@entities/tree'
 import { sentenceDataParserReducer } from '@entities/sentences'
+import { authReducer } from '@entities/auth'
 
 export const rootReducer = combineReducers({
 	parsingPage: parsingTextReducer,
@@ -13,5 +14,6 @@ export const rootReducer = combineReducers({
 	parseText: parseTextWordReducer,
 	modal: modalReducer,
 	tree: treeParserReducer,
+	auth: authReducer,
 	sentenceData: sentenceDataParserReducer
 })

@@ -1,13 +1,21 @@
 import { apiInstance } from '../api-instance'
 import { uris } from '../apis'
 
-export const parseText = async ({ line }: { line: string }): Promise<any> => {
+export const parseText = async (userId: number, { line }: { line: string }): Promise<any> => {
 	console.log({ line })
-	const { data } = await apiInstance.post(uris.posts.parseTree, [
+	const { data } = await apiInstance.post(
+		uris.posts.parseTree,
+		[
+			{
+				text: line
+			}
+		],
 		{
-			text: line
+			headers: {
+				'User-Id': userId
+			}
 		}
-	])
+	)
 
 	console.log({ data })
 

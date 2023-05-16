@@ -7,6 +7,7 @@ import { modalSagasWatchers } from '@shared/ui'
 import { deleteWordSagasWatchers } from '@features/database/DeleteWord/model'
 import { treeParseAsyncActionsWatcher } from '@entities/tree/model/async'
 import { sentenceDataParseAsyncActionsWatcher } from '@entities/sentences/model/async'
+import { authSagasWatchers } from '@entities/auth'
 
 export const rootWatcher = function* () {
 	yield all([
@@ -15,6 +16,7 @@ export const rootWatcher = function* () {
 		saveDatabaseSagasWatchers.saveDatabaseAsyncActionsWatcher(),
 		modalSagasWatchers.modalActionsWatcher(),
 		deleteWordSagasWatchers.deleteWordAsyncActionsWatcher(),
+		authSagasWatchers.databaseWordAsyncActionsWatcher(),
 		treeParseAsyncActionsWatcher(),
 		sentenceDataParseAsyncActionsWatcher()
 	])
