@@ -1,9 +1,6 @@
 from typing import Union
 
-import re
-import nltk
 from fastapi.staticfiles import StaticFiles
-import cairosvg
 from wiki_ru_wordnet import WikiWordnet
 from cairosvg import svg2png
 from uuid import uuid4
@@ -22,17 +19,20 @@ from nltk.grammar import CFG
 from nltk.tree import *
 from nltk.tree.prettyprinter import TreePrettyPrinter
 
-from utils import ConnectionManager, MessageListener, MessageResponseLoop
+from dotenv import load_dotenv
+load_dotenv()
+import os
 
+from utils import ConnectionManager, MessageListener, MessageResponseLoop
 
 from help import get_words, parse_words, to_normal, tree2svg, db, check
 
 from collections import Counter
 
 app = FastAPI()
-nlp = spacy.load("ru_core_news_sm")
+nlp = spacy.load(os.environ.get('LIB'))
 
-app.mount("/images", StaticFiles(directory="images"), name="images")
+app.mount(os.environ.get('IMAGE_PATH'), StaticFiles(directory=os.environ.get('IMAGE_NAME')), name=os.environ.get('IMAGE_NAME'))
 
 origins = [
    "*"
