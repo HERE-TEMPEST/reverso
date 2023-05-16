@@ -16,6 +16,8 @@ websockets = "*"
 wiki-ru-wordnet = "*"
 pandas = "*"
 python-dotenv = "*"
+psycopg2-binary = "*"
+ru-core-news-sm = "*"
 
 [dev-packages]
 

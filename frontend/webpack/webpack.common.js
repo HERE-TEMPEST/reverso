@@ -45,6 +45,9 @@ module.exports = {
 		path: path.resolve(__dirname, '..', './build'),
 		filename: 'bundle.js'
 	},
+	externals: {
+		Config: JSON.stringify(require('dotenv').config().parsed)
+	},
 	plugins: [
 		new HTMLWebpackPlugin({
 			template: path.resolve(__dirname, '..', './src/index.html')

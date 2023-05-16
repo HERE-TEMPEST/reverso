@@ -11,6 +11,7 @@
     "compose-function": "^3.0.3",
     "craco-alias": "^3.0.1",
     "css-loader": "^6.7.3",
+    "dotenv": "^16.0.3",
     "eslint-import-resolver-webpack": "^0.13.2",
     "formik": "^2.2.9",
     "lodash": "^4.17.21",

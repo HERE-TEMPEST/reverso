@@ -1,6 +1,11 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable no-undef */
+const env = require('Config')
+
 export const apiConfig = {
-	backendUri: 'http://127.0.0.1:8000',
+	backendUri: `${env.SERVER_PROTOCOL}://${env.SERVER_HOST}:${env.SERVER_PORT}`,
 	backendUri2: 'http://192.168.175.208:8000/',
-	host: '127.0.0.1',
-	port: 8000
+	protocol: env.SERVER_PROTOCOL,
+	host: env.SERVER_HOST,
+	port: env.SERVER_PORT
 }
