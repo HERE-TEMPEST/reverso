@@ -1,18 +1,18 @@
 version: '3.8'
 
 services:
-  # pgadmin:
-  #   container_name: pgadmin4_container
-  #   image: dpage/pgadmin4:6.15
-  #   restart: always
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
-  #     PGADMIN_DEFAULT_PASSWORD: root
-  #     PGADMIN_LISTEN_PORT: 82
-  #   ports:
-  #    - "8082:82"
-  #   depends_on:
-  #     - db
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4:6.15
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+      PGADMIN_LISTEN_PORT: 82
+    ports:
+     - "8082:82"
+    depends_on:
+      - db
 
   db:
     image: postgres:alpine
@@ -44,15 +44,15 @@ services:
     depends_on:
       - db
 
-  # client:
-  #   build:
-  #     dockerfile: ./Dockerfile
-  #     context: ./frontend/
-  #   ports:
-  #     - ${CLIENT_PORT:?err}:${CLIENT_PORT:?err}
-  #   environment:
-  #     SERVER_PORT: ${SERVER_PORT:?err}
-  #     SERVER_HOST: ${SERVER_HOST:?err}
-  #     SERVER_PROTOCOL: ${SERVER_PROTOCOL:?err}
-  #   depends_on:
-  #     - server
+  client:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./frontend/
+    ports:
+      - ${CLIENT_PORT:?err}:${CLIENT_PORT:?err}
+    environment:
+      SERVER_PORT: ${SERVER_PORT:?err}
+      SERVER_HOST: ${SERVER_HOST:?err}
+      SERVER_PROTOCOL: ${SERVER_PROTOCOL:?err}
+    depends_on:
+      - server
