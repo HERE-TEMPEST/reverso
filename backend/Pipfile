@@ -15,6 +15,7 @@ cairosvg = "*"
 websockets = "*"
 wiki-ru-wordnet = "*"
 pandas = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
