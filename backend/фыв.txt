@@ -1,0 +1,26 @@
+1. Добавить ендпоинт для загрузки файла
+    fileName = uuid() + .txt
+    file = FileEntity(filename)
+    for word of (нормализованные слова из файла)
+      file.addWord(WordEntity(word))
+    neo4j.saveFileNode(file)  
+
+2. Добавить ендпоинт для обновления файла
+    file = neo4j.getFileByName(filename)  
+    file.purge()
+    for word of (нормализованные слова из файла)
+      file.addWord(WordEntity(word))
+    neo4j.saveFileNode(file)
+
+3. Добавить ендпоинт для получения списка названий всех файлов
+    files = neo4j.getAllFilesNodes()
+    files.map((file) => file.getName())
+    
+4. Добавить ендпоинт для удаления файла
+    neo4j.removeFileNodeByName(filename)
+
+5. Добавить агента для обработки строки, который ввел пользователь
+    neo4j.getFilesNodesByWords([WordEntity]) -> [FileEntity]
+    еще достать name из FileEntity
+
+    # hdajshdasjd.txt asdjashdjasd.txt *Мама мыла раму

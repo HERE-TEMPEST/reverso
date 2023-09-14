@@ -17,6 +17,9 @@ class FileEntity:
   def setName(self, name: str):
     self.name = name
 
+  def purge(self):
+    self.words = []
+
   def addWord(self, newWord: WordEntity):
     isExists = False
     for word in self.words:

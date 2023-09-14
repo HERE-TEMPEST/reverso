@@ -8,5 +8,6 @@ from .find_anime_agent_year import FindAnimeAgentYear
 from .hello_agent import HelloAgent
 from .pitty_agent import PittyAgent
 from .help_agent import HelpAgent
+from .find_files_by_substring_agent import FindFilesBySubstringAgent
 
-agents = [HelloAgent(), FindAnimeAgent(), SurpriseAgent(), FindAnimeAgentRaiting(), FindAnimeAgentGenre(), FindAnimeAgentYear(), PittyAgent(), HelpAgent()]
+agents = [HelloAgent(), FindAnimeAgent(), SurpriseAgent(), FindAnimeAgentRaiting(), FindAnimeAgentGenre(), FindAnimeAgentYear(), PittyAgent(), HelpAgent(), FindFilesBySubstringAgent()]

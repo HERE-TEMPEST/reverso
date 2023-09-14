@@ -1,9 +1,6 @@
-from typing import Union
+from typing import Union, Annotated
 
-import re
-import nltk
 from fastapi.staticfiles import StaticFiles
-import cairosvg
 from wiki_ru_wordnet import WikiWordnet
 from cairosvg import svg2png
 from uuid import uuid4
@@ -12,7 +9,7 @@ import time
 import pathlib
 import spacy
 from spacy import displacy
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, File
 from pydantic import BaseModel
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
@@ -23,17 +20,22 @@ from nltk.tree import *
 from nltk.tree.prettyprinter import TreePrettyPrinter
 
 from utils import ConnectionManager, MessageListener, MessageResponseLoop
+from repository import Neo4JStorage, WordEntity, FileEntity, FileStorage
 
-from repository import Neo4JStorage, WordEntity, FileEntity
-
+from help import get_words, to_normal
 
 # вот так мы подключаемся и работаем с neo4j
 neo4JStorage = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
-word = neo4JStorage.saveWordNode(WordEntity("Andrei"))
-file = FileEntity("FileAndrei")
-file.addWord(word)
-neo4JStorage.saveFileNode(file)
+fileStorage = FileStorage("localhost:9000/", "QeTQEELnYpjfj4zz3TG2", "PoRa1jKp6Sb8tCrnfdvRYMVlyTuLTcfZoWV2uJ0p")
 
+# word2 = neo4JStorage.saveWordNode(WordEntity("Alesya"))
+# word = neo4JStorage.saveWordNode(WordEntity("Nikita"))
+# word1 = neo4JStorage.saveWordNode(WordEntity("Andrei"))
+# file = FileEntity("FileAndrei")
+# file.addWord(word)
+# file.addWord(word1)
+# neo4JStorage.saveFileNode(file)
+# files = neo4JStorage.matchFilesByWords([word, word1])
 
 from help import get_words, parse_words, to_normal, tree2svg, db, check
 
@@ -101,6 +103,33 @@ def get_words_from_file(file_path: str):
 
     return {'file': file_path, 'text': lines, 'words': parsed_words}
 
+
+@app.post("/search/uploadfile")
+async def upload_file(file: Annotated[bytes, File()]):
+  filename = f"{uuid4()}-{uuid4()}.txt"
+  fileStorage.save(filename, file)
+  fileEntity = neo4JStorage.saveFileNode(FileEntity(filename))
+  line = file.decode()
+  words, _ = get_words(line, False, "en")
+  normal_words = to_normal(words)
+  for word in normal_words:
+    fileEntity.addWord(WordEntity(word))
+  neo4JStorage.saveFileNode(fileEntity)
+
+@app.get("/search/downloadfile")
+async def download_file(file: str):
+  return fileStorage.get(file)
+
+@app.post("/search/reuploadfile")
+async def re_upload_file(filename: str, file: Annotated[bytes, File()]):
+  fileEntity = neo4JStorage.saveFileNode(FileEntity(filename))
+  line = file.decode()
+  words, _ = get_words(line, False, "en")
+  normal_words = to_normal(words)
+  fileEntity.purge()
+  for word in normal_words:
+    fileEntity.addWord(WordEntity(word))
+  neo4JStorage.saveFileNode(fileEntity)
 
 @app.post('/text/post')
 def get_words_from_text(text: Text):

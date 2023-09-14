@@ -35,7 +35,7 @@ class Neo4JStorage:
 
   def getWordById(self, id: int) -> WordEntity | None:
     findQuery = "MATCH (word) WHERE ID(word) = $id RETURN word"
-    response = self.query(findQuery, { "id": id })
+    response = self.query(findQuery, { "id": int(id) })
     if len(response) > 0:
       record = response[0]
       node = record.get('word')
@@ -46,12 +46,16 @@ class Neo4JStorage:
     findQuery = """
       MATCH (file:File), (word:Word) WHERE id(file)=$fileId AND (file)-[:INCLUDE]->(word) RETURN word
     """
-    response = self.query(findQuery, { "fileId": fileId })
+    response = self.query(findQuery, { "fileId": int(fileId) })
     mappedWords = []
     for record in response:
       node = record.get('word')
       mappedWords.append(self.__mapWordNodeToEntity(node))
     return mappedWords
+  
+  def getWordsByFileName(self, fileName: str) -> List[WordEntity]:
+    file = self.getFileByName(fileName)
+    return file.getWords()
 
   def saveFileNode(self, entity: FileEntity):
     file: FileEntity = self.getFileByName(entity.getName())
@@ -63,7 +67,6 @@ class Neo4JStorage:
             isNew = False
             break
         if isNew:
-          print('relation')
           word = self.saveWordNode(word1)
           self.saveRelationBetweenWordAndFile(word.getId(), file.getId())
           file.addWord(word)
@@ -101,12 +104,35 @@ class Neo4JStorage:
 
   def getFileById(self, fileId: int) -> FileEntity | None:
     findQuery = "MATCH (file) WHERE ID(file) = $fileId RETURN file"
-    response = self.query(findQuery, { "fileId": fileId })
+    response = self.query(findQuery, { "fileId": int(fileId) })
     if len(response) > 0:
       record = response[0]
       node = record.get('file')
-      return FileEntity(node['name'], node.element_id)
+      words = self.getWordsByFileId(node.element_id)
+      return self.__mapFileNodeToEntity(node, words)
     return None
+
+  def matchFilesByWords(self, words: List[WordEntity]) -> List[FileEntity]:
+    findQuery = """
+      MATCH (file), (word) WHERE id(word) IN $words AND (file)-[:INCLUDE]->(word)
+      WITH file, count(word) as wordCount
+      WHERE wordCount = $countWords
+      RETURN file
+    """
+    wordIds = []
+    for word in words:
+      foundedWord = self.getWordByName(word.getName())
+      if foundedWord is None:
+        return []
+      wordIds.append(int(foundedWord.getId()))
+    response = self.query(findQuery, { "words": wordIds, "countWords": len(words) })
+    files = []
+    for record in response:
+      node = record.get('file')
+      mappedNode = self.__mapFileNodeToEntity(node, [])
+      file = self.getFileById(mappedNode.getId())
+      files.append(file)
+    return files
 
   def query(self, query, parameters: Dict[str, Any] | None = None, db=None):
     assert self.driver is not None, "Driver not initialized!"
@@ -124,16 +150,26 @@ class Neo4JStorage:
 
 
   def saveRelationBetweenWordAndFile(self, wordId: int, fileId: int):
-    print(wordId, " ",fileId)
-    
+    relationIsExist = self.existRelationBetweenWordAndFile(wordId, fileId)    
+    if relationIsExist:
+      return
     findQuery = """
       MATCH (word:Word), (file:File)
       WHERE id(word)=$wordId AND id(file)=$fileId
       CREATE (file)-[relation:INCLUDE]->(word)
       RETURN relation
     """
-    self.query(findQuery, { "fileId": fileId, "wordId": wordId })
+    self.query(findQuery, { "fileId": int(fileId), "wordId": int(wordId) })
     return
+
+  def existRelationBetweenWordAndFile(self, wordId: int, fileId: int):
+    findQuery = """
+      MATCH (file)-[relation:INCLUDE]->(word)
+      WHERE id(word)=$wordId AND id(file)=$fileId
+      RETURN relation
+    """
+    result = self.query(findQuery, { "fileId": int(fileId), "wordId": int(wordId) })
+    return len(result) > 0
 
   def removeRelationBetweenWordAndFile(self, wordId: int, fileId: int):
     findQuery = """
@@ -141,16 +177,11 @@ class Neo4JStorage:
       WHERE id(word)=$wordId AND id(file)=$fileId
       DELETE relation
     """
-    self.query(findQuery, { "fileId": fileId, "wordId": wordId })
+    self.query(findQuery, { "fileId": int(fileId), "wordId": int(wordId) })
     return
 
   def __mapWordNodeToEntity(self, node: Any):
-    return WordEntity(node['name'], node.element_id)
+    return WordEntity(node['name'], int(node.element_id))
 
   def __mapFileNodeToEntity(self, node: Any, words: List[WordEntity]):
-    return FileEntity(node['name'], node.element_id, words)
-  
-# 
-# MATCH (charlie:Person {name: 'Charlie Sheen'}), (oliver:Person {name: 'Oliver Stone'})
-# CREATE (charlie)-[:ACTED_IN {role: 'Bud Fox'}]->(wallStreet:Movie {title: 'Wall Street'})<-[:DIRECTED]-(oliver)
-# 
+    return FileEntity(node['name'], int(node.element_id), words)

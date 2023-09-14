@@ -31,6 +31,7 @@ class MessageListener:
       ('помощь'): self.agents[7].execute, #HelpAgent
       ('помочь'): self.agents[7].execute, #HelpAgent
       ('что', 'уметь'): self.agents[7].execute, #HelpAgent
+      ('поиск'): self.agents[8].execute, #FindFilesBySubstringAgent
     }
   
   def executeAgent(self, input_string: list, *args: list):
@@ -39,7 +40,6 @@ class MessageListener:
       check = []
       if type(keys) is tuple:
         for key in keys:
-          print(key)
           if key in input_string:
             check.append(1)
           else:
@@ -51,8 +51,7 @@ class MessageListener:
           check.append(0)
 
       if all(check):
-        answer = self.commands[keys](*args)
-        return answer
+          answer = self.commands[keys](*args)
       else:
         answer = 'Не могу ответить на вопрос, я еще учусь... Но скорее всего не научусь...'
         

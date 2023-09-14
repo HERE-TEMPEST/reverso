@@ -36,6 +36,10 @@ def get_words(lines, type=True, lang = 'ru'):
                 words.append(word.lower())
         for word in line2:
             words_en.append(word)
+
+        if 'поиск' in line1:
+          words_en.extend(list(line1))
+          words_en.remove('поиск')
         return words, words_en
 
     return words
