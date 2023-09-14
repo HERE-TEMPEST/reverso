@@ -24,6 +24,16 @@ from nltk.tree.prettyprinter import TreePrettyPrinter
 
 from utils import ConnectionManager, MessageListener, MessageResponseLoop
 
+from repository import Neo4JStorage, WordEntity, FileEntity
+
+
+# вот так мы подключаемся и работаем с neo4j
+neo4JStorage = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
+word = neo4JStorage.saveWordNode(WordEntity("Andrei"))
+file = FileEntity("FileAndrei")
+file.addWord(word)
+neo4JStorage.saveFileNode(file)
+
 
 from help import get_words, parse_words, to_normal, tree2svg, db, check
 
