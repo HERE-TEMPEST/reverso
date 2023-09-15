@@ -36,7 +36,6 @@ class MessageListener:
   
   def executeAgent(self, input_string: list, *args: list):
     answer = 'Привет'
-    #print(input_string, args)
     for keys in self.commands.keys():
       check = []
       if type(keys) is tuple:
@@ -52,7 +51,8 @@ class MessageListener:
           check.append(0)
 
       if all(check):
-          answer = self.commands[keys](*args)
+        answer = self.commands[keys](*args)
+        break
       else:
         answer = 'Не могу ответить на вопрос, я еще учусь... Но скорее всего не научусь...'
         
@@ -72,11 +72,13 @@ class MessageListener:
     body = message.message
 
     words, words_en = get_words(body, False, 'en')
-    #print(words, words_en)
     words = to_normal(words)
 
-    answer = ''
-    answer = self.executeAgent(words, words_en, body)
+    input_dict = dict()
+    input_dict['words_en'] = words_en
+    input_dict['body'] = body
+
+    answer = self.executeAgent(words, input_dict)
 
     response = Response(id, answer)
     await self.done(response)

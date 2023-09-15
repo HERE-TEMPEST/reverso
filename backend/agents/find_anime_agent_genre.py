@@ -4,8 +4,8 @@ class FindAnimeAgentGenre(AgentBase):
   def __init__(self):
     super().__init__()
 
-  def execute(self, input_str: list, user_str: str) -> str: # Какие аниме ты знаешь?
-  
+  def execute(self, input_dict: dict) -> str: # Какие аниме ты знаешь?
+    input_str = input_dict['words_en']
     if not input_str:
       return 'Извините, не могу обработать Ваш запрос. Возможно, Вы неправильно ввелт название. Попробуйте еще раз.'
 
