@@ -32,14 +32,15 @@ def get_words(lines, type=True, lang = 'ru'):
         for word in line1:
             if word == ('больше' or 'меньше' or 'позже' or 'раньше'):
                 words_en.append(word)
+            elif word == 'поиск':
+                words_en.extend(list(line1))
+                words_en.remove(word)
+                words.append(word.lower())
+                return words, words_en
             else:
                 words.append(word.lower())
         for word in line2:
             words_en.append(word)
-
-        if 'поиск' in line1:
-          words_en.extend(list(line1))
-          words_en.remove('поиск')
         return words, words_en
 
     return words
