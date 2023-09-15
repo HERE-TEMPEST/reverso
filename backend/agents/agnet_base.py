@@ -7,5 +7,5 @@ class AgentBase(ABC):
     self.df = pd.read_csv('anime.csv')
 
   @abstractmethod
-  def execute(self, input_str: str) -> str:
+  def execute(self, input_str: str, user_str = None) -> str:
     pass

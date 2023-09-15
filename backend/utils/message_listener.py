@@ -15,18 +15,18 @@ class MessageListener:
     self.loop: MessageResponseLoop = None
 
     self.commands = {
+      ('привет'): self.agents[0].execute, #HelloAgent
+      ('добрый', 'день'): self.agents[0].execute, #HelloAgent
+      ('добрый', 'вечер'): self.agents[0].execute, #HelloAgent
+      ('добрый', 'утро'): self.agents[0].execute, #HelloAgent
+      ('салют'): self.agents[0].execute, #HelloAgent
+      ('халло'): self.agents[0].execute, #HelloAgent
+      ('хай'): self.agents[0].execute, #HelloAgent
       ('аниме', 'серия'): self.agents[1].execute, #FindAnimeAgent
+      ('яой'): self.agents[2].execute, #SurpriseAgent
       ('аниме', 'рейтинг'): self.agents[3].execute, #FindAnimeAgentRaiting
       ('аниме', 'жанр'): self.agents[4].execute, #FindAnimeAgentGenre
       ('аниме', 'год'): self.agents[5].execute, #FindAnimeAgentYear
-      ('яой'): self.agents[2].execute, #SurpriseAgent
-      ('привет'): self.agents[0].execute, #ExampleAgent
-      ('добрый', 'день'): self.agents[0].execute, #ExampleAgent
-      ('добрый', 'вечер'): self.agents[0].execute, #ExampleAgent
-      ('добрый', 'утро'): self.agents[0].execute, #ExampleAgent
-      ('салют'): self.agents[0].execute, #ExampleAgent
-      ('халло'): self.agents[0].execute, #ExampleAgent
-      ('хай'): self.agents[0].execute, #ExampleAgent
       ('жалко'): self.agents[6].execute, #PittyAgent
       ('помощь'): self.agents[7].execute, #HelpAgent
       ('помочь'): self.agents[7].execute, #HelpAgent
@@ -36,6 +36,7 @@ class MessageListener:
   
   def executeAgent(self, input_string: list, *args: list):
     answer = 'Привет'
+    #print(input_string, args)
     for keys in self.commands.keys():
       check = []
       if type(keys) is tuple:
@@ -71,12 +72,11 @@ class MessageListener:
     body = message.message
 
     words, words_en = get_words(body, False, 'en')
+    #print(words, words_en)
     words = to_normal(words)
 
     answer = ''
-    answer = self.executeAgent(words, words_en)
-    
-    # answer = 'что-то пошло не так'
+    answer = self.executeAgent(words, words_en, body)
 
     response = Response(id, answer)
     await self.done(response)

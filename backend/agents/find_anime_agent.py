@@ -4,7 +4,7 @@ class FindAnimeAgent(AgentBase):
   def __init__(self):
     super().__init__()
 
-  def execute(self, input_str: list) -> str: # Какие аниме ты знаешь?
+  def execute(self, input_str: list, user_str: str) -> str: # Какие аниме ты знаешь?
     if 'больше' in input_str:
       input_str.remove('больше')
       if not input_str:
