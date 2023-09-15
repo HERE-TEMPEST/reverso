@@ -4,7 +4,8 @@ class FindAnimeAgentYear(AgentBase):
   def __init__(self):
     super().__init__()
 
-  def execute(self, input_str: list, user_str: str) -> str: # Какие аниме ты знаешь?
+  def execute(self, input_dict: dict) -> str: # Какие аниме ты знаешь?
+    input_str = input_dict['words_en']
     if 'позже' in input_str:
       input_str.remove('позже')
       if not input_str:
