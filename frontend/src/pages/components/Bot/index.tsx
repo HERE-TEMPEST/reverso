@@ -17,10 +17,29 @@ export const BotPage = () => {
 				websocketRef.current.onmessage = async (event: MessageEvent<any>) => {
 					await new Promise((r) => setTimeout(r, 1000))
 
+					let message: string = event.data
+
+					if (message.startsWith('#')) {
+						message = message.replace('#', '')
+						const [filesLine, question] = message.split('*')
+						const filesNames = filesLine.split(' ')
+
+						console.log(filesLine, filesNames)
+
+						message =
+							'Вот, что я нашел:\n' +
+							filesNames
+								.map(
+									(filename, index) =>
+										`${index + 1}: http://localhost:3001/search/?filename=${filename}&question=${encodeURI(question)} `
+								)
+								.join('\n')
+					}
+
 					setMessages((_messages) => [
 						..._messages,
 						{
-							message: event.data,
+							message,
 							who: 'Bot'
 						}
 					])

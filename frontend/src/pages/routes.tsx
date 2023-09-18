@@ -13,6 +13,7 @@ import {
 } from './components'
 import { MainLayout } from './layouts'
 import { WordDependenciesPage } from './components/WordDependencies'
+import { SearchPage } from './components/Search'
 
 export const GenerateRoutes = () => {
 	return useRoutes([
@@ -39,6 +40,10 @@ export const GenerateRoutes = () => {
 				{
 					path: appRoutes.dependencies.path,
 					element: <DependenciesPage />
+				},
+				{
+					path: appRoutes.search.path,
+					element: <SearchPage />
 				},
 				{
 					path: appRoutes.wordDependencies.path,

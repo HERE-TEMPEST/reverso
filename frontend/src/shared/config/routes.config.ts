@@ -41,6 +41,12 @@ export const appRoutes = {
 			return '/parsed-text'
 		}
 	},
+	search: {
+		path: 'search',
+		goto() {
+			return '/search'
+		}
+	},
 	supports: {
 		path: 'supports',
 		goto() {
