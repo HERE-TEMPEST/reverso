@@ -92,6 +92,17 @@ class Neo4JStorage:
         file.addWord(word)
     return file
 
+  def getAllFiles(self):
+    findQuery = "MATCH (file:File) RETURN file"
+    response = self.query(findQuery)
+    files = []
+    for record in response:
+      node = record.get('file')
+      mappedNode = self.__mapFileNodeToEntity(node, [])
+      file = self.getFileById(mappedNode.getId())
+      files.append(file)
+    return files
+
   def getFileByName(self, fileName: str) -> FileEntity | None:
     findQuery = "MATCH (file:File { name: $name }) RETURN file"
     response = self.query(findQuery, { "name": fileName })

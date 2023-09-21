@@ -27,7 +27,7 @@ def get_words(lines, type=True, lang = 'ru'):
     elif not type and lang == 'en':
         lines : str
         words_en = []
-        line1 = re.findall(r'[А-яЁё][а-яё\-]*', lines)
+        line1 = re.findall(r'(\|\||&&|!|[А-яЁё][а-яё\-]*)', lines)
         line2 = re.findall(r'[A-z0-9][A-z0-9\-]*', lines)
         for word in line1:
             if word == ('больше' or 'меньше' or 'позже' or 'раньше'):
