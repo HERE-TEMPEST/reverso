@@ -12,7 +12,7 @@ class MessageResponseLoop:
   async def handleMessage(self, id: str, text: str):
 
     # разбиваем текст на предложения
-    split_regex = re.compile(r'[.|!|?|…]')
+    split_regex = re.compile(r'[.?…]')
     sentences = filter(lambda t: t, [t.strip() for t in split_regex.split(text)])
     for s in sentences:
       msg = Message(id, s)
