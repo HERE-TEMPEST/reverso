@@ -27,7 +27,7 @@ from help import get_words, to_normal
 # вот так мы подключаемся и работаем с neo4j
 neo4JStorage = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
 #"X2Kn8DhdKjrzm3t5kg2s", "H8O4HYfXsF74kcHRxUXDXktvW0TxEdYCHxAC8XLt"
-fileStorage = FileStorage("localhost:9000/", "BhZ5eECrlRHBlq0SaV3z", "Psa5FZhEEYEToCsGRxpPJeZ5Jj3fzJTmMbhdfQO9")
+fileStorage = FileStorage("localhost:9000/", "O4e7weF3Qx2xXfe0gUrc", "gJRvF6vvJY47xEQaI2E5VCSyxpOXJqYu5u3CInhF")
 
 # word2 = neo4JStorage.saveWordNode(WordEntity("Alesya"))
 # word = neo4JStorage.saveWordNode(WordEntity("Nikita"))
