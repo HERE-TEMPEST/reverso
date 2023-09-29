@@ -3,7 +3,7 @@ import svgling
 import pymorphy2
 from tinydb import TinyDB, Query
 from typing import List
-
+from langdetect import detect_langs
 morph = pymorphy2.MorphAnalyzer()
 db = TinyDB('./db.json')
 check = Query()
@@ -82,3 +82,22 @@ def tree2svg(t):
     img = svgling.draw_tree(t)
     svg_data = img.get_svg()
     return svg_data
+
+def detect_language_by_neuro(text: str):
+    lang_arr = detect_langs(text)
+    lang_arr = [str(it) for it in lang_arr]
+
+    check_arr = [0, 0, 0]
+    for it in lang_arr:
+        lang, numb = it.split(':')
+        if lang == 'ru':
+            check_arr[0] += float(numb)
+        elif lang == 'en':
+            check_arr[1] += float(numb)
+        else:
+            check_arr[2] += float(numb)
+
+    check_arr = [float('{:.2f}'.format((it*100))) for it in check_arr]
+    
+    return f"Данный текст является на {check_arr[0]}% является русскоязычным, на {check_arr[1]}% является англоязычным и на {check_arr[2]}% состоит из других языков" 
+    

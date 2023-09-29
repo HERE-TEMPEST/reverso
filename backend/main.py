@@ -22,7 +22,11 @@ from nltk.tree.prettyprinter import TreePrettyPrinter
 from utils import ConnectionManager, MessageListener, MessageResponseLoop
 from repository import Neo4JStorage, WordEntity, FileEntity, FileStorage
 
-from help import get_words, to_normal
+from help import get_words, to_normal, detect_language_by_neuro
+
+#вот такой вот вызов этой штуки
+print(detect_language_by_neuro('Эта книга адресована всем, кто изучает русский язык. Но состоит'))
+print(detect_language_by_neuro("I am eight. I go to school. I am a pupil. I am a pupil of the second form. I live in Moscow. Эта книга адресована всем, кто изучает русский язык."))
 
 # вот так мы подключаемся и работаем с neo4j
 neo4JStorage = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
