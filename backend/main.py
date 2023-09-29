@@ -31,7 +31,7 @@ from help import get_words, to_normal, detect_language_by_neuro, detect_language
 # вот так мы подключаемся и работаем с neo4j
 neo4JStorage = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
 #"X2Kn8DhdKjrzm3t5kg2s", "H8O4HYfXsF74kcHRxUXDXktvW0TxEdYCHxAC8XLt"
-fileStorage = FileStorage("localhost:9000/", "O4e7weF3Qx2xXfe0gUrc", "gJRvF6vvJY47xEQaI2E5VCSyxpOXJqYu5u3CInhF")
+fileStorage = FileStorage("localhost:9000/", "iAw843BnMNwspLTKcPXz", "3jMVTy8WOs2uZiXGBZEuuO1tTrEZp7drVRUPXHuF")
 
 # word2 = neo4JStorage.saveWordNode(WordEntity("Alesya"))
 # word = neo4JStorage.saveWordNode(WordEntity("Nikita"))
@@ -109,12 +109,13 @@ def get_words_from_file(file_path: str):
     return {'file': file_path, 'text': lines, 'words': parsed_words}
 
 
-@app.post("/file/learndetectlanguage")
+@app.post("/file/detectlanguage")
 async def learn_by_file(file: Annotated[bytes, File()]):
   line = file.decode()
   neuro =  detect_language_by_neuro(line)
   alphabet = detect_language_by_alphabet(line)
   words = detect_language_by_words(line)
+  # words = "not implemented yet"
   return f"""
     Нейносетевой подход дал ответ:
       {neuro}
@@ -124,7 +125,7 @@ async def learn_by_file(file: Annotated[bytes, File()]):
       {words}
   """
 
-@app.post("/file/detectlanguage")
+@app.post("/file/learndetectlanguage")
 async def detect_language_in_file(file: Annotated[bytes, File()], expectedLanguage: str):
   line = file.decode()
   learn_language_by_alphabet(line, expectedLanguage)

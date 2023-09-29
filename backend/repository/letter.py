@@ -1,7 +1,5 @@
 class LetterEntity:
   def __init__(self, name: str, amountOccurrences: int, id: int | None = None):
-    if len(name) > 1 or not name.isalnum():
-      raise 'not characher'
     self.name = name.lower()
     self.amountOccurrences = int(amountOccurrences)
     self.id: int | None = id

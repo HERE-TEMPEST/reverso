@@ -27,7 +27,7 @@ class LanguageEntity:
 
   def containsLetter(self, findLetter: LetterEntity):
     for letter in self.letters:
-      if findLetter.equals(letter):
+      if findLetter.equals(letter) is True:
         return True
     return False
 

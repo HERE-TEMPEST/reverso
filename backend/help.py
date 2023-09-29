@@ -9,7 +9,7 @@ db = TinyDB('./db.json')
 check = Query()
 from typing import Dict
 
-from repository import Neo4JStorage, LetterEntity, WordEntity
+from repository import Neo4JStorage, LetterEntity, WordEntity, LanguageEntity
 
 def get_words(lines, type=True, lang = 'ru'):
     words = []
@@ -104,47 +104,93 @@ def detect_language_by_neuro(text: str):
     return f"Данный текст является на {check_arr[0]}% является русскоязычным, на {check_arr[1]}% является англоязычным и на {check_arr[2]}% состоит из других языков" 
 
 def detect_language_by_alphabet(text: str):
-    neo4j = Neo4JStorage("", "", "")
+    neo4j = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
+
     english = neo4j.getLanguageByName("english")
+    if english is None:
+        english = LanguageEntity("english", None, [], [])
     russian = neo4j.getLanguageByName("russian")
+
     englishAlphabet: Dict[str, int] = dict()
     russianAlphabet: Dict[str, int] = dict()
-    for char in text.lower():
-      if english.containsLetter(LetterEntity(char)):
-        if englishAlphabet[char] is not None:
-          englishAlphabet[char] = 0
-        englishAlphabet[char] += 1
-      if russian.containsLetter(LetterEntity(char)):
-        if russianAlphabet[char] is not None:
-          russianAlphabet[char] = 0
-        russianAlphabet[char] += 1
-    neo4j.saveLanguageNode()
+
+    normilizedLine = ''.join(list(re.findall(r'[А-яЁёA-z][А-яёA-z\-]*', text.lower())))
+
+    for char in normilizedLine:
+      if english.containsLetter(LetterEntity(char, 0)) is True:
+        englishAlphabet.update({char: (englishAlphabet.get(char) or 0) + 1 })
+      if russian.containsLetter(LetterEntity(char, 0)) is True:
+        russianAlphabet.update({char : (russianAlphabet.get(char) or 0) + 1 })
+
     amountRussionLettersOccurences = 0
     amountEnglishLettersOccurences = 0
+
+    print(russianAlphabet)
+
     for letterOccurences in englishAlphabet.values():
-        amountEnglishLettersOccurences += letterOccurences
+        amountEnglishLettersOccurences += letterOccurences    
+
     for letterOccurences in russianAlphabet.values():
         amountRussionLettersOccurences += letterOccurences
-    percentRussian = (len(text) / amountRussionLettersOccurences) * 100
-    percentEnglish = (len(text) / amountEnglishLettersOccurences) * 100
-    percentOtherLanguages = (len(text) / (amountRussionLettersOccurences | amountEnglishLettersOccurences)) * 100
+
+    countLetters = len(''.join(list(re.findall(r'[А-яЁёA-z][А-яёA-z\-]*', text.lower()))))
+
+    percentRussian = ((amountRussionLettersOccurences) / countLetters) * 100
+    percentEnglish = ((amountEnglishLettersOccurences) / countLetters) * 100
+    percentOtherLanguages = (((countLetters - amountRussionLettersOccurences - amountEnglishLettersOccurences)) / countLetters) * 100
     return f"Данный текст является на {percentRussian}% является русскоязычным, на {percentEnglish}% является англоязычным и на {percentOtherLanguages}% состоит из других языков" 
 
 def learn_language_by_alphabet(line: str, languageName: str):
-  neo4j = Neo4JStorage("", "", "")
-  language = neo4j.getLanguageByName(languageName)
-  for char in line:
-    language.addLetter(LetterEntity(char))
+  neo4j = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
+  normilizedLine = ''.join(list(re.findall(r'[А-яЁёA-z][А-яёA-z\-]*', line.lower())))
+  language = neo4j.getLanguageByName(languageName.lower())
+  if language is None:
+    language = LanguageEntity(languageName.lower())
+  for char in normilizedLine:
+    language.addLetter(LetterEntity(char, 0))
   neo4j.saveLanguageNode(language)
 
 def learn_language_by_words(line: str, languageName: str):
-  neo4j = Neo4JStorage("", "", "")
+  neo4j = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
   language = neo4j.getLanguageByName(languageName)
+  if language is None:
+    language = LanguageEntity(languageName.lower())
   for word in re.findall(r'(\|\||&&|!|[А-яЁё][а-яё\-]*)', line):
-    language.addWord(WordEntity(word))
+    [normilizedWord] = to_normal([word])
+    language.addWord(WordEntity(normilizedWord, 0))
   neo4j.saveLanguageNode(language)
 
 
 def detect_language_by_words(text: str):
-    neo4j = Neo4JStorage("", "", "")
-    return f"Данный текст является на {check_arr[0]}% является русскоязычным, на {check_arr[1]}% является англоязычным и на {check_arr[2]}% состоит из других языков" 
+    neo4j = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
+
+    english = neo4j.getLanguageByName("english")
+    if english is None:
+        english = LanguageEntity("english", None, [], [])
+    russian = neo4j.getLanguageByName("russian")
+
+    englishWords: Dict[str, int] = dict()
+    russianWords: Dict[str, int] = dict()
+
+    for char in re.findall(r'[А-яЁёA-z0-9][А-яёA-z0-9\-]*', text.lower()):
+      [normilizedWord] = to_normal([char])
+      if english.containsWord(WordEntity(normilizedWord, 0)) is True:
+        englishWords.update({normilizedWord: (englishWords.get(normilizedWord) or 0) + 1 })
+      if russian.containsWord(WordEntity(normilizedWord, 0)) is True:
+        russianWords.update({normilizedWord : (russianWords.get(normilizedWord) or 0) + 1 })
+
+    amountRussionLettersOccurences = 0
+    amountEnglishLettersOccurences = 0
+
+
+    for letterOccurences in englishWords.values():
+        amountEnglishLettersOccurences += letterOccurences    
+
+    for letterOccurences in russianWords.values():
+        amountRussionLettersOccurences += letterOccurences
+
+    countWords = len(re.findall(r'[А-яЁёA-z0-9][А-яёA-z0-9\-]*', text.lower()))
+    percentRussian = ((amountRussionLettersOccurences) / (countWords or 1)) * 100
+    percentEnglish = ((amountEnglishLettersOccurences) / (countWords or 1)) * 100
+    percentOtherLanguages = (((countWords - amountRussionLettersOccurences - amountEnglishLettersOccurences)) / (countWords or 1)) * 100
+    return f"Данный текст является на {percentRussian}% является русскоязычным, на {percentEnglish}% является англоязычным и на {percentOtherLanguages}% состоит из других языков" 

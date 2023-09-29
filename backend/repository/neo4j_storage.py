@@ -257,7 +257,7 @@ class Neo4JStorage:
 
   def getWordsByLanguageId(self, languageId: int) -> List[WordEntity]:
     findQuery = """
-      MATCH (language:Language), (word:Word) WHERE id(language)=$languageId AND (file)-[:INCLUDE]->(word) RETURN word
+      MATCH (language:Language), (word:Word) WHERE id(language)=$languageId AND (language)-[:INCLUDE]->(word) RETURN word
     """
     response = self.query(findQuery, { "languageId": int(languageId) })
     mappedWords = []
@@ -268,7 +268,7 @@ class Neo4JStorage:
 
   def getLettersByLanguageId(self, languageId: int) -> List[LetterEntity]:
     findQuery = """
-      MATCH (language:Language), (letter:Letter) WHERE id(language)=$languageId AND (file)-[:INCLUDE]->(letter) RETURN letter
+      MATCH (language:Language), (letter:Letter) WHERE id(language)=$languageId AND (language)-[:INCLUDE]->(letter) RETURN letter
     """
     response = self.query(findQuery, { "languageId": int(languageId) })
     mappedWords = []
@@ -338,7 +338,7 @@ class Neo4JStorage:
         if isNew:
           word = self.saveWordNode(word1)
           self.saveRelationBetweenWordAndLanguage(word.getId(), language.getId())
-          language.addWord(letter)
+          language.addWord(word)
       for word1 in language.getWords():
         isDeleted = True
         for word2 in entity.getWords():
@@ -367,10 +367,10 @@ class Neo4JStorage:
 
 
   def __mapLetterNodeToEntity(self, node: Any):
-    return LetterEntity(node['name'], node['amountOccurrences'], int(node.element_id))
+    return LetterEntity(node['name'], node['amountOccurrences'] or 0, int(node.element_id))
 
   def __mapWordNodeToEntity(self, node: Any):
-    return WordEntity(node['name'], node['amountOccurrences'], int(node.element_id))
+    return WordEntity(node['name'], node['amountOccurrences'] or 0, int(node.element_id))
 
   def __mapLanguageNodeToEntity(self, node: Any, letters: List[LetterEntity], words: List[WordEntity]):
     return LanguageEntity(node['name'], int(node.element_id), letters, words)
