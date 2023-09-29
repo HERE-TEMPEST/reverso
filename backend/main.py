@@ -22,11 +22,11 @@ from nltk.tree.prettyprinter import TreePrettyPrinter
 from utils import ConnectionManager, MessageListener, MessageResponseLoop
 from repository import Neo4JStorage, WordEntity, FileEntity, FileStorage
 
-from help import get_words, to_normal, detect_language_by_neuro
+from help import get_words, to_normal, detect_language_by_neuro, detect_language_by_alphabet, detect_language_by_words, learn_language_by_alphabet, learn_language_by_words
 
-#вот такой вот вызов этой штуки
-print(detect_language_by_neuro('Эта книга адресована всем, кто изучает русский язык. Но состоит'))
-print(detect_language_by_neuro("I am eight. I go to school. I am a pupil. I am a pupil of the second form. I live in Moscow. Эта книга адресована всем, кто изучает русский язык."))
+# #вот такой вот вызов этой штуки
+# print(detect_language_by_neuro('Эта книга адресована всем, кто изучает русский язык. Но состоит'))
+# print(detect_language_by_neuro("I am eight. I go to school. I am a pupil. I am a pupil of the second form. I live in Moscow. Эта книга адресована всем, кто изучает русский язык."))
 
 # вот так мы подключаемся и работаем с neo4j
 neo4JStorage = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
@@ -107,6 +107,29 @@ def get_words_from_file(file_path: str):
 
 
     return {'file': file_path, 'text': lines, 'words': parsed_words}
+
+
+@app.post("/file/learndetectlanguage")
+async def learn_by_file(file: Annotated[bytes, File()]):
+  line = file.decode()
+  neuro =  detect_language_by_neuro(line)
+  alphabet = detect_language_by_alphabet(line)
+  words = detect_language_by_words(line)
+  return f"""
+    Нейносетевой подход дал ответ:
+      {neuro}
+    Алфавитный подход дал ответ:
+      {alphabet}
+    Анализ по словам дал ответ:
+      {words}
+  """
+
+@app.post("/file/detectlanguage")
+async def detect_language_in_file(file: Annotated[bytes, File()], expectedLanguage: str):
+  line = file.decode()
+  learn_language_by_alphabet(line, expectedLanguage)
+  learn_language_by_words(line, expectedLanguage)
+  return "Done"
 
 
 @app.post("/search/uploadfile")

@@ -61,9 +61,11 @@ class LanguageEntity:
     for word in self.words:
       if word.equals(newWord):
         isExists = True
+        word.incrementOccurrences()
         break
     if not isExists:
-      self.words.append(word)
+      self.words.append(newWord)
+      newWord.incrementOccurrences()
 
   def removeWord(self, removeWord: WordEntity):
     for word in self.words:

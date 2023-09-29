@@ -9,7 +9,7 @@ db = TinyDB('./db.json')
 check = Query()
 from typing import Dict
 
-from repository import Neo4JStorage, LetterEntity 
+from repository import Neo4JStorage, LetterEntity, WordEntity
 
 def get_words(lines, type=True, lang = 'ru'):
     words = []
@@ -129,6 +129,21 @@ def detect_language_by_alphabet(text: str):
     percentEnglish = (len(text) / amountEnglishLettersOccurences) * 100
     percentOtherLanguages = (len(text) / (amountRussionLettersOccurences | amountEnglishLettersOccurences)) * 100
     return f"Данный текст является на {percentRussian}% является русскоязычным, на {percentEnglish}% является англоязычным и на {percentOtherLanguages}% состоит из других языков" 
+
+def learn_language_by_alphabet(line: str, languageName: str):
+  neo4j = Neo4JStorage("", "", "")
+  language = neo4j.getLanguageByName(languageName)
+  for char in line:
+    language.addLetter(LetterEntity(char))
+  neo4j.saveLanguageNode(language)
+
+def learn_language_by_words(line: str, languageName: str):
+  neo4j = Neo4JStorage("", "", "")
+  language = neo4j.getLanguageByName(languageName)
+  for word in re.findall(r'(\|\||&&|!|[А-яЁё][а-яё\-]*)', line):
+    language.addWord(WordEntity(word))
+  neo4j.saveLanguageNode(language)
+
 
 def detect_language_by_words(text: str):
     neo4j = Neo4JStorage("", "", "")
