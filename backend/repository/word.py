@@ -1,6 +1,7 @@
 class WordEntity:
-  def __init__(self, name: str, id: int | None = None):
+  def __init__(self, name: str, amountOccurrences: int, id: int | None = None):
     self.name = name.lower()
+    self.amountOccurrences = int(amountOccurrences or 0)
     self.id: int | None = id
 
   def getName(self):
@@ -11,6 +12,12 @@ class WordEntity:
 
   def setId(self, id: int):
     self.id = id
+
+  def incrementOccurrences(self):
+    self.amountOccurrences += 1
+
+  def getAmountOccurrences(self):
+    return self.amountOccurrences
 
   def setName(self, name: str):
     self.name = name.lower()

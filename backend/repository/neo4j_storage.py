@@ -20,8 +20,8 @@ class Neo4JStorage:
     founded = self.getWordByName(word.getName())
     if founded is not None:
       return founded
-    createQuery = "CREATE (word:Word { name: $name }) RETURN word"
-    response = self.query(createQuery, { "name": word.getName() })
+    createQuery = "CREATE (word:Word { name: $name, amountOccurrences: $amountOccurrences }) RETURN word"
+    response = self.query(createQuery, { "name": word.getName(), "amountOccurrences": word.getAmountOccurrences() })
     record = response[0]
     node = record.get('word')
     return self.__mapWordNodeToEntity(node)
@@ -224,6 +224,47 @@ class Neo4JStorage:
     self.query(findQuery, { "languageId": int(languageId), "letterId": int(letterId) })
     return
 
+  def saveRelationBetweenWordAndLanguage(self, wordId: int, languageId: int):
+    relationIsExist = self.existRelationBetweenWordAndLanguage(wordId, languageId)    
+    if relationIsExist:
+      return
+    findQuery = """
+      MATCH (word:Word), (language:Language)
+      WHERE id(word)=$wordId AND id(language)=$languageId
+      CREATE (language)-[relation:INCLUDE]->(word)
+      RETURN relation
+    """
+    self.query(findQuery, { "languageId": int(languageId), "wordId": int(wordId) })
+    return
+
+  def existRelationBetweenWordAndLanguage(self, wordId: int, languageId: int):
+    findQuery = """
+      MATCH (language)-[relation:INCLUDE]->(word)
+      WHERE id(word)=$wordId AND id(language)=$languageId
+      RETURN relation
+    """
+    result = self.query(findQuery, { "wordId": int(wordId), "languageId": int(languageId) })
+    return len(result) > 0
+
+  def removeRelationBetweenWordAndLanguage(self, wordId: int, languageId: int):
+    findQuery = """
+      MATCH (word:Word)<-[relation:INCLUDE]-(language:Language)
+      WHERE id(word)=$wordId AND id(language)=$languageId
+      DELETE relation
+    """
+    self.query(findQuery, { "languageId": int(languageId), "wordId": int(wordId) })
+    return
+
+  def getWordsByLanguageId(self, languageId: int) -> List[WordEntity]:
+    findQuery = """
+      MATCH (language:Language), (word:Word) WHERE id(language)=$languageId AND (file)-[:INCLUDE]->(word) RETURN word
+    """
+    response = self.query(findQuery, { "languageId": int(languageId) })
+    mappedWords = []
+    for record in response:
+      node = record.get('word')
+      mappedWords.append(self.__mapWordNodeToEntity(node))
+    return mappedWords
 
   def getLettersByLanguageId(self, languageId: int) -> List[LetterEntity]:
     findQuery = """
@@ -243,7 +284,8 @@ class Neo4JStorage:
       record = response[0]
       node = record.get('language')
       letters = self.getLettersByLanguageId(node.element_id)
-      return self.__mapLanguageNodeToEntity(node, letters)
+      words = self.getWordsByLanguageId(node.element_id)
+      return self.__mapLanguageNodeToEntity(node, letters, words)
     return None
 
   def getLetterByName(self, letterName: str) -> LetterEntity | None:
@@ -259,13 +301,13 @@ class Neo4JStorage:
     founded = self.getLetterByName(letter.getName())
     if founded is not None:
       return founded
-    createQuery = "CREATE (letter:Letter { name: $name }) RETURN letter"
-    response = self.query(createQuery, { "name": letter.getName() })
+    createQuery = "CREATE (letter:Letter { name: $name, amountOccurrences: $amountOccurrences  }) RETURN letter"
+    response = self.query(createQuery, { "name": letter.getName(), "amountOccurrences": letter.getAmountOccurrences() })
     record = response[0]
     node = record.get('letter')
     return self.__mapLetterNodeToEntity(node)
 
-  def saveLanguage(self, entity: LanguageEntity):
+  def saveLanguageNode(self, entity: LanguageEntity):
     language: LanguageEntity = self.getLanguageByName(entity.getName())
     if language is not None:
       for letter1 in entity.getLetters():
@@ -287,28 +329,51 @@ class Neo4JStorage:
         if isDeleted:
           self.removeRelationBetweenLetterAndLanguage(letter1.getId(), language.getId())
           language.removeLetter(letter1)
+      for word1 in entity.getWords():
+        isNew = True
+        for word2 in language.getWords():
+          if word1.getName() == word2.getName():
+            isNew = False
+            break
+        if isNew:
+          word = self.saveWordNode(word1)
+          self.saveRelationBetweenWordAndLanguage(word.getId(), language.getId())
+          language.addWord(letter)
+      for word1 in language.getWords():
+        isDeleted = True
+        for word2 in entity.getWords():
+          if word1.getName() == word2.getName():
+            isDeleted = False
+            break
+        if isDeleted:
+          self.removeRelationBetweenWordAndLanguage(word1.getId(), language.getId())
+          language.removeWord(word1)
       return language
     else:
       createQuery = "CREATE (language:Language { name: $name }) RETURN language"
       response = self.query(createQuery, { "name": entity.getName() })
       record = response[0]
       node = record.get('language')
-      language = self.__mapLanguageNodeToEntity(node, [])
+      language = self.__mapLanguageNodeToEntity(node, [], [])
       for _letter in entity.getLetters():
         letter = self.saveLetterNode(_letter)
         self.saveRelationBetweenLetterAndLanguage(letter.getId(), language.getId())
         language.addLetter(letter)
+      for _word in entity.getWords():
+        word = self.saveWordNode(_word)
+        self.saveRelationBetweenWordAndLanguage(word.getId(), language.getId()) 
+        language.addWord(word)
     return language
 
 
   def __mapLetterNodeToEntity(self, node: Any):
-    return LetterEntity(node['name'], int(node.element_id))
+    return LetterEntity(node['name'], node['amountOccurrences'], int(node.element_id))
 
   def __mapWordNodeToEntity(self, node: Any):
-    return WordEntity(node['name'], int(node.element_id))
+    return WordEntity(node['name'], node['amountOccurrences'], int(node.element_id))
 
-  def __mapLanguageNodeToEntity(self, node: Any, letters: List[LetterEntity]):
-    return LanguageEntity(node['name'], int(node.element_id), letters)
+  def __mapLanguageNodeToEntity(self, node: Any, letters: List[LetterEntity], words: List[WordEntity]):
+    return LanguageEntity(node['name'], int(node.element_id), letters, words)
 
   def __mapFileNodeToEntity(self, node: Any, words: List[WordEntity]):
     return FileEntity(node['name'], int(node.element_id), words)

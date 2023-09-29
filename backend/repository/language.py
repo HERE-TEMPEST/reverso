@@ -1,12 +1,14 @@
 from typing import List
 
 from .letter import LetterEntity
+from .word import WordEntity
 
 class LanguageEntity:
-  def __init__(self, name: str, id: int | None = None,  letters: List[LetterEntity] = []):
+  def __init__(self, name: str, id: int | None = None,  letters: List[LetterEntity] = [], words: List[WordEntity] = []):
     self.name: str = name
     self.id: int | None = id
     self.letters: List[LetterEntity] = letters
+    self.words: List[WordEntity] = words
 
   def getName(self):
     return self.name
@@ -17,24 +19,57 @@ class LanguageEntity:
   def setName(self, name: str):
     self.name = name
 
-  def purge(self):
+  def purgeLetters(self):
     self.letters = []
+
+  def purgeWords(self):
+    self.words = []
+
+  def containsLetter(self, findLetter: LetterEntity):
+    for letter in self.letters:
+      if findLetter.equals(letter):
+        return True
+    return False
 
   def addLetter(self, newLetter: LetterEntity):
     isExists = False
-    for word in self.words:
-      if word.equals(newLetter):
+    for letter in self.letters:
+      if letter.equals(newLetter):
         isExists = True
         break
     if not isExists:
-      self.words.append(newLetter)
+      self.letters.append(newLetter)
 
 
-  def removeLetter(self, letter: LetterEntity):
-    for _letter in self.letters:
-      if letter.equals(_letter):
-        self.letters.remove(_letter)
+  def removeLetter(self, removeLetter: LetterEntity):
+    for letter in self.letters:
+      if letter.equals(removeLetter):
+        self.letters.remove(letter)
         break
     
   def getLetters(self) -> List[LetterEntity]:
     return self.letters
+
+  def containsWord(self, findWord: WordEntity):
+    for word in self.words:
+      if word.equals(findWord):
+        return True
+    return False
+
+  def addWord(self, newWord: WordEntity):
+    isExists = False
+    for word in self.words:
+      if word.equals(newWord):
+        isExists = True
+        break
+    if not isExists:
+      self.words.append(word)
+
+  def removeWord(self, removeWord: WordEntity):
+    for word in self.words:
+      if word.equals(removeWord):
+        self.words.remove(word)
+        break
+    
+  def getWords(self) -> List[WordEntity]:
+    return self.words

@@ -7,7 +7,9 @@ from langdetect import detect_langs
 morph = pymorphy2.MorphAnalyzer()
 db = TinyDB('./db.json')
 check = Query()
+from typing import Dict
 
+from repository import Neo4JStorage, LetterEntity 
 
 def get_words(lines, type=True, lang = 'ru'):
     words = []
@@ -100,4 +102,34 @@ def detect_language_by_neuro(text: str):
     check_arr = [float('{:.2f}'.format((it*100))) for it in check_arr]
     
     return f"Данный текст является на {check_arr[0]}% является русскоязычным, на {check_arr[1]}% является англоязычным и на {check_arr[2]}% состоит из других языков" 
-    
+
+def detect_language_by_alphabet(text: str):
+    neo4j = Neo4JStorage("", "", "")
+    english = neo4j.getLanguageByName("english")
+    russian = neo4j.getLanguageByName("russian")
+    englishAlphabet: Dict[str, int] = dict()
+    russianAlphabet: Dict[str, int] = dict()
+    for char in text.lower():
+      if english.containsLetter(LetterEntity(char)):
+        if englishAlphabet[char] is not None:
+          englishAlphabet[char] = 0
+        englishAlphabet[char] += 1
+      if russian.containsLetter(LetterEntity(char)):
+        if russianAlphabet[char] is not None:
+          russianAlphabet[char] = 0
+        russianAlphabet[char] += 1
+    neo4j.saveLanguageNode()
+    amountRussionLettersOccurences = 0
+    amountEnglishLettersOccurences = 0
+    for letterOccurences in englishAlphabet.values():
+        amountEnglishLettersOccurences += letterOccurences
+    for letterOccurences in russianAlphabet.values():
+        amountRussionLettersOccurences += letterOccurences
+    percentRussian = (len(text) / amountRussionLettersOccurences) * 100
+    percentEnglish = (len(text) / amountEnglishLettersOccurences) * 100
+    percentOtherLanguages = (len(text) / (amountRussionLettersOccurences | amountEnglishLettersOccurences)) * 100
+    return f"Данный текст является на {percentRussian}% является русскоязычным, на {percentEnglish}% является англоязычным и на {percentOtherLanguages}% состоит из других языков" 
+
+def detect_language_by_words(text: str):
+    neo4j = Neo4JStorage("", "", "")
+    return f"Данный текст является на {check_arr[0]}% является русскоязычным, на {check_arr[1]}% является англоязычным и на {check_arr[2]}% состоит из других языков" 

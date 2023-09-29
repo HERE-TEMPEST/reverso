@@ -1,8 +1,9 @@
 class LetterEntity:
-  def __init__(self, name: str, id: int | None = None):
+  def __init__(self, name: str, amountOccurrences: int, id: int | None = None):
     if len(name) > 1 or not name.isalnum():
       raise 'not characher'
     self.name = name.lower()
+    self.amountOccurrences = int(amountOccurrences)
     self.id: int | None = id
 
   def getName(self):
@@ -13,6 +14,12 @@ class LetterEntity:
 
   def setId(self, id: int):
     self.id = id
+
+  def incrementOccurrences(self):
+    self.amountOccurrences += 1
+
+  def getAmountOccurrences(self):
+    return self.amountOccurrences
 
   def setName(self, name: str):
     self.name = name.lower()
