@@ -17,6 +17,8 @@ wiki-ru-wordnet = "*"
 pandas = "*"
 neo4j = "*"
 minio = "*"
+textblob = "*"
+langdetect = "*"
 
 [dev-packages]
 

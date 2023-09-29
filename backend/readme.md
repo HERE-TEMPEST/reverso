@@ -44,6 +44,11 @@ just a spacy
 ### `pipenv install spacy`
 ### `python -m spacy download ru_core_news_sm`
 
+## TextBlolb
+
+### `pipenv install textblob`
+### `python -m textblob.download_corpora`
+
 ## Launch backend with `uvicorn main:app --reload`
 ### Run with [http://127.0.0.1:8000/docs]
 
