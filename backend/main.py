@@ -31,7 +31,7 @@ from help import get_words, to_normal, detect_language_by_neuro, detect_language
 # вот так мы подключаемся и работаем с neo4j
 neo4JStorage = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
 #"X2Kn8DhdKjrzm3t5kg2s", "H8O4HYfXsF74kcHRxUXDXktvW0TxEdYCHxAC8XLt"
-fileStorage = FileStorage("localhost:9000/", "iAw843BnMNwspLTKcPXz", "3jMVTy8WOs2uZiXGBZEuuO1tTrEZp7drVRUPXHuF")
+fileStorage = FileStorage("localhost:9000/", "ADdqhW3Dr7im2uGIgYUE", "WzKYkXnxRA56J9AuHmd1Z9zPK18P6ClHX5w8jOFT")
 
 # word2 = neo4JStorage.saveWordNode(WordEntity("Alesya"))
 # word = neo4JStorage.saveWordNode(WordEntity("Nikita"))
@@ -86,7 +86,7 @@ class TwoWords(BaseModel):
     word_2: str
 
 @app.get('/file/get')
-def get_words_from_file(file_path: str):
+async def get_words_from_file(file_path: str):
     try:
         f = open(file_path, 'r')
         lines = f.readlines()
@@ -110,14 +110,14 @@ def get_words_from_file(file_path: str):
 
 
 @app.post("/file/detectlanguage")
-async def learn_by_file(file: Annotated[bytes, File()]):
+async def detect_language_in_file(file: Annotated[bytes, File()]):
   line = file.decode()
   neuro =  detect_language_by_neuro(line)
   alphabet = detect_language_by_alphabet(line)
   words = detect_language_by_words(line)
-  # words = "not implemented yet"
+  
   return f"""
-    Нейносетевой подход дал ответ:
+    Нейросетевой подход дал ответ:
       {neuro}
     Алфавитный подход дал ответ:
       {alphabet}
@@ -126,7 +126,7 @@ async def learn_by_file(file: Annotated[bytes, File()]):
   """
 
 @app.post("/file/learndetectlanguage")
-async def detect_language_in_file(file: Annotated[bytes, File()], expectedLanguage: str):
+async def learn_by_file(file: Annotated[bytes, File()], expectedLanguage: str):
   line = file.decode()
   learn_language_by_alphabet(line, expectedLanguage)
   learn_language_by_words(line, expectedLanguage)
@@ -161,7 +161,7 @@ async def re_upload_file(filename: str, file: Annotated[bytes, File()]):
   neo4JStorage.saveFileNode(fileEntity)
 
 @app.post('/text/post')
-def get_words_from_text(text: Text):
+async def get_words_from_text(text: Text):
     words = get_words(text.text, False)
     word_counts = Counter(words)
 
@@ -171,12 +171,12 @@ def get_words_from_text(text: Text):
 
 
 @app.get('/db/get')
-def get_all_from_db():
+async def get_all_from_db():
     return {'db': db.all()}
 
 
 @app.post('/db/post')
-def save_and_update_db(words: List[Word]):
+async def save_and_update_db(words: List[Word]):
     for word in words:
         if db.search(check.word == word.word):
             db.update({'amount': word.amount,'POS': word.POS, 'animacy': word.animacy, 'case': word.case, 'gender': word.gender, 'mood': word.mood,
@@ -187,7 +187,7 @@ def save_and_update_db(words: List[Word]):
     return {'msg': 'db is updated, dude'}
 
 @app.delete('/db/word/del')
-def delete_word(word: str):
+async def delete_word(word: str):
     if db.search(check.word == word):
         db.remove(check.word == word)
         return {'msg': 'word is deleted, dude'}
@@ -195,12 +195,12 @@ def delete_word(word: str):
         return {'msg': 'word is not exist, dude'}
 
 @app.delete('/db/del')
-def clear_db():
+async def clear_db():
     db.truncate()
     return {'msg': 'db is clear, dude'}
 
 @app.post('/sentence/post')
-def scheme_from_sentences(sentences: List[Text]):
+async def scheme_from_sentences(sentences: List[Text]):
     pathes = []
     for sentence in sentences:
         doc = nlp(sentence.text)
@@ -212,7 +212,7 @@ def scheme_from_sentences(sentences: List[Text]):
     return {'msg': 'svg are created', 'files': pathes}
 
 @app.post('/sentence/post_tree')
-def tree_from_sentences(sentences: List[Text]):
+async def tree_from_sentences(sentences: List[Text]):
     answer = []
     for sentence in sentences:
         words = get_words(sentence.text, type=False)
@@ -285,7 +285,7 @@ def tree_from_sentences(sentences: List[Text]):
     return {'msg': answer}
 
 @app.post('/sentence/post_subtree')
-def subtree_from_tree(tree: List[Text]):
+async def subtree_from_tree(tree: List[Text]):
     answer = []
     for tr in tree:
         words = get_words(tr.text, type=False)
@@ -302,7 +302,7 @@ def subtree_from_tree(tree: List[Text]):
     return {'msg': answer}
 
 @app.post('/words/inform')
-def get_new_info_about_words(sentences: List[Text]):
+async def get_new_info_about_words(sentences: List[Text]):
     wikiwordnet = WikiWordnet()
     graph = []
     for sent in sentences:
@@ -372,7 +372,7 @@ def get_new_info_about_words(sentences: List[Text]):
 
 
 @app.post('/words/find_hyp')
-def only_for_two_words(words: TwoWords):
+async def only_for_two_words(words: TwoWords):
     wikiwordnet = WikiWordnet()
     graph = []
     nodes = [words.word_1, words.word_2]
