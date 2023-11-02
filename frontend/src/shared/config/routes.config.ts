@@ -17,6 +17,12 @@ export const appRoutes = {
 			return '/language-detector'
 		}
 	},
+	notesCreator: {
+		path: 'notes-creator',
+		goto() {
+			return '/notes-creator'
+		}
+	},
 	parser: {
 		path: '/',
 		goto() {

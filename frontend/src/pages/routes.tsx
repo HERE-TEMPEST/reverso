@@ -7,6 +7,7 @@ import {
 	DatabasePage,
 	DependenciesPage,
 	LanguageDetector,
+	NotesCreator,
 	ParsedTextPage,
 	ParserPage,
 	SupportsPage,
@@ -33,6 +34,10 @@ export const GenerateRoutes = () => {
 				{
 					path: appRoutes.languageDetector.path,
 					element: <LanguageDetector />
+				},
+				{
+					path: appRoutes.notesCreator.path,
+					element: <NotesCreator />
 				},
 				{
 					path: appRoutes.parseSentense.path,

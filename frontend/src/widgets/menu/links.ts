@@ -26,6 +26,10 @@ export const menuLinks = [
 		link: appRoutes.languageDetector.goto()
 	},
 	{
+		label: 'Создание конспекта',
+		link: appRoutes.notesCreator.goto()
+	},
+	{
 		label: 'Справочник',
 		link: appRoutes.supports.goto()
 	}
