@@ -22,6 +22,7 @@ langdetect = "*"
 bert-extractive-summarizer = "*"
 torch = "*"
 rake-nltk = "*"
+yake = "*"
 
 [dev-packages]
 

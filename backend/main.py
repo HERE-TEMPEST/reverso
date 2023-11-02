@@ -29,7 +29,7 @@ from help import get_words, parse_words, to_normal, tree2svg, db, check
 # вот так мы подключаемся и работаем с neo4j
 neo4JStorage = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
 #"X2Kn8DhdKjrzm3t5kg2s", "H8O4HYfXsF74kcHRxUXDXktvW0TxEdYCHxAC8XLt"
-fileStorage = FileStorage("localhost:9000/", "ADdqhW3Dr7im2uGIgYUE", "WzKYkXnxRA56J9AuHmd1Z9zPK18P6ClHX5w8jOFT")
+fileStorage = FileStorage("localhost:9000/", "fqBVnMbCZ2teclEKtCYd", "2PCNB9ASEwfYP6Z4O7dihVnm9fraDPgLkMWNhjyb")
 
 from collections import Counter
 
@@ -99,8 +99,6 @@ async def get_words_from_file(file_path: str):
 @app.post("/file/make_shorter")
 async def make_shorter(file: Annotated[bytes, File()], num: int):
     line = file.decode()
-
-    print(line)
 
     extract_0 = find_key_words(line) or ""
     extract_1 = make_text_shorter(line, num) or ""
