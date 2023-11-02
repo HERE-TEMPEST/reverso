@@ -22,27 +22,14 @@ from nltk.tree.prettyprinter import TreePrettyPrinter
 from utils import ConnectionManager, MessageListener, MessageResponseLoop
 from repository import Neo4JStorage, WordEntity, FileEntity, FileStorage
 
-from help import get_words, to_normal, detect_language_by_neuro, detect_language_by_alphabet, detect_language_by_words, learn_language_by_alphabet, learn_language_by_words
-
-# #вот такой вот вызов этой штуки
-# print(detect_language_by_neuro('Эта книга адресована всем, кто изучает русский язык. Но состоит'))
-# print(detect_language_by_neuro("I am eight. I go to school. I am a pupil. I am a pupil of the second form. I live in Moscow. Эта книга адресована всем, кто изучает русский язык."))
+from help import get_words, to_normal, detect_language_by_neuro, detect_language_by_alphabet, detect_language_by_words
+from help import learn_language_by_alphabet, learn_language_by_words, make_text_shorter, make_text_shorter_neuro, find_key_words
+from help import get_words, parse_words, to_normal, tree2svg, db, check
 
 # вот так мы подключаемся и работаем с neo4j
 neo4JStorage = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
 #"X2Kn8DhdKjrzm3t5kg2s", "H8O4HYfXsF74kcHRxUXDXktvW0TxEdYCHxAC8XLt"
 fileStorage = FileStorage("localhost:9000/", "ADdqhW3Dr7im2uGIgYUE", "WzKYkXnxRA56J9AuHmd1Z9zPK18P6ClHX5w8jOFT")
-
-# word2 = neo4JStorage.saveWordNode(WordEntity("Alesya"))
-# word = neo4JStorage.saveWordNode(WordEntity("Nikita"))
-# word1 = neo4JStorage.saveWordNode(WordEntity("Andrei"))
-# file = FileEntity("FileAndrei")
-# file.addWord(word)
-# file.addWord(word1)
-# neo4JStorage.saveFileNode(file)
-# files = neo4JStorage.matchFilesByWords([word, word1])
-
-from help import get_words, parse_words, to_normal, tree2svg, db, check
 
 from collections import Counter
 
@@ -108,6 +95,18 @@ async def get_words_from_file(file_path: str):
 
     return {'file': file_path, 'text': lines, 'words': parsed_words}
 
+
+@app.post("/file/make_shorter")
+async def make_shorter(file: Annotated[bytes, File()], num: int):
+    line = file.decode()
+
+    print(line)
+
+    extract_0 = find_key_words(line) or ""
+    extract_1 = make_text_shorter(line, num) or ""
+    extract_2 = make_text_shorter_neuro(line, num) or ""
+
+    return {"key": extract_0, "sent": extract_1, "neuro": extract_2}
 
 @app.post("/file/detectlanguage")
 async def detect_language_in_file(file: Annotated[bytes, File()]):

@@ -19,6 +19,9 @@ neo4j = "*"
 minio = "*"
 textblob = "*"
 langdetect = "*"
+bert-extractive-summarizer = "*"
+torch = "*"
+rake-nltk = "*"
 
 [dev-packages]
 

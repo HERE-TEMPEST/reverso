@@ -1,15 +1,21 @@
 import re
 import svgling
 import pymorphy2
+import spacy
 from tinydb import TinyDB, Query
-from typing import List
+from typing import List, Dict
 from langdetect import detect_langs
+from repository import Neo4JStorage, LetterEntity, WordEntity, LanguageEntity
+from summarizer import Summarizer
+from analize.analize import TextRank4Sentences
+from rake_nltk import Rake
+
 morph = pymorphy2.MorphAnalyzer()
 db = TinyDB('./db.json')
 check = Query()
-from typing import Dict
 
-from repository import Neo4JStorage, LetterEntity, WordEntity, LanguageEntity
+nlp_ru = spacy.load("ru_core_news_sm")
+nlp_en = spacy.load("en_core_web_sm")
 
 def get_words(lines, type=True, lang = 'ru'):
     words = []
@@ -193,3 +199,19 @@ def detect_language_by_words(text: str):
     percentEnglish = ((amountEnglishLettersOccurences) / (countWords or 1)) * 100
     percentOtherLanguages = (((countWords - amountRussionLettersOccurences - amountEnglishLettersOccurences)) / (countWords or 1)) * 100
     return f"Данный текст является на {percentRussian}% является русскоязычным, на {percentEnglish}% является англоязычным и на {percentOtherLanguages}% состоит из других языков" 
+
+def find_key_words(text: str):
+    rake_nltk_var = Rake()
+    rake_nltk_var.extract_keywords_from_text(text)
+    keyword_extracted = rake_nltk_var.get_ranked_phrases()
+    return ', '.join(keyword_extracted[0:6])
+
+def make_text_shorter(text: str, numb_of_sent: int):
+    tr4sh = TextRank4Sentences()
+    tr4sh.analyze(text)
+    return ' '.join(tr4sh.get_top_sentences(numb_of_sent))
+
+def make_text_shorter_neuro(text: str, numb_of_sent: int):
+    model = Summarizer()
+    result = model(text, num_sentences=numb_of_sent, min_length=60)
+    return ''.join(result)
