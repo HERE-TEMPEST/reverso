@@ -8,7 +8,7 @@ import { api } from '@shared/api'
 
 export const NotesCreator = () => {
 	const [text, updateText] = useState('')
-	const [countSentences, setCountSentences] = useState('russian')
+	const [countSentences, setCountSentences] = useState('')
 	const [extractionAnswer, setExtractionAnswer] = useState('')
 
 	const extractNotes = async () => {
