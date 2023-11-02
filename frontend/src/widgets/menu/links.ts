@@ -22,6 +22,10 @@ export const menuLinks = [
 		link: appRoutes.wordDependencies.goto()
 	},
 	{
+		label: 'Определение языка',
+		link: appRoutes.languageDetector.goto()
+	},
+	{
 		label: 'Справочник',
 		link: appRoutes.supports.goto()
 	}

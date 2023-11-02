@@ -6,6 +6,7 @@ import {
 	BotPage,
 	DatabasePage,
 	DependenciesPage,
+	LanguageDetector,
 	ParsedTextPage,
 	ParserPage,
 	SupportsPage,
@@ -28,6 +29,10 @@ export const GenerateRoutes = () => {
 				{
 					path: appRoutes.bot.path,
 					element: <BotPage />
+				},
+				{
+					path: appRoutes.languageDetector.path,
+					element: <LanguageDetector />
 				},
 				{
 					path: appRoutes.parseSentense.path,

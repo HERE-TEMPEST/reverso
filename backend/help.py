@@ -109,6 +109,8 @@ def detect_language_by_alphabet(text: str):
     if english is None:
         english = LanguageEntity("english", None, [], [])
     russian = neo4j.getLanguageByName("russian")
+    if russian is None:
+        russian = LanguageEntity("russian", None, [], [])
 
     englishAlphabet: Dict[str, int] = dict()
     russianAlphabet: Dict[str, int] = dict()
@@ -145,7 +147,7 @@ def learn_language_by_alphabet(line: str, languageName: str):
   normilizedLine = ''.join(list(re.findall(r'[А-яЁёA-z][А-яёA-z\-]*', line.lower())))
   language = neo4j.getLanguageByName(languageName.lower())
   if language is None:
-    language = LanguageEntity(languageName.lower())
+    language = LanguageEntity(languageName.lower(), None, [], [])
   for char in normilizedLine:
     language.addLetter(LetterEntity(char, 0))
   neo4j.saveLanguageNode(language)
@@ -154,7 +156,7 @@ def learn_language_by_words(line: str, languageName: str):
   neo4j = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
   language = neo4j.getLanguageByName(languageName)
   if language is None:
-    language = LanguageEntity(languageName.lower())
+    language = LanguageEntity(languageName.lower(), None, [], [])
   for word in re.findall(r'(\|\||&&|!|[А-яЁёA-z][а-яёA-z\-]*)', line):
     [normilizedWord] = to_normal([word])
     language.addWord(WordEntity(normilizedWord, 0))
@@ -167,13 +169,16 @@ def detect_language_by_words(text: str):
     if english is None:
         english = LanguageEntity("english", None, [], [])
     russian = neo4j.getLanguageByName("russian")
+    if russian is None:
+        russian = LanguageEntity("russian", None, [], [])
+
 
     englishWords: Dict[str, int] = dict()
     russianWords: Dict[str, int] = dict()
 
     for char in re.findall(r'[А-яЁёA-z0-9][А-яёA-z0-9\-]*', text.lower()):
       [normilizedWord] = to_normal([char])
-      if russian.containsWord(WordEntity(normilizedWord, 0)) is True:
+      if russian.containsWord(WordEntity(normilizedWord, 0, None)) is True:
         russianWords.update({normilizedWord : (russianWords.get(normilizedWord) or 0) + 1 })
       elif english.containsWord(WordEntity(normilizedWord, 0)) is True:
         englishWords.update({normilizedWord: (englishWords.get(normilizedWord) or 0) + 1 })

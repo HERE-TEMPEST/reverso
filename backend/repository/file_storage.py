@@ -4,6 +4,10 @@ from io import BytesIO
 
 class FileStorage:
   def __init__(self, url: str, username: str, password: str):
+
+    username='bQ0l7oIKG238wPwXcYWR'
+    password='CA4BNm9oEot23YSuT2cgNRiFsz2gEomUiiHwXv1R'
+
     self.client: Minio = Minio(
       url,
       access_key=username,

@@ -11,6 +11,12 @@ export const appRoutes = {
 			return '/bot'
 		}
 	},
+	languageDetector: {
+		path: 'language-detector',
+		goto() {
+			return '/language-detector'
+		}
+	},
 	parser: {
 		path: '/',
 		goto() {

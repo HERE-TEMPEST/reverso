@@ -111,19 +111,22 @@ async def get_words_from_file(file_path: str):
 
 @app.post("/file/detectlanguage")
 async def detect_language_in_file(file: Annotated[bytes, File()]):
-  line = file.decode()
-  neuro =  detect_language_by_neuro(line)
-  alphabet = detect_language_by_alphabet(line)
-  words = detect_language_by_words(line)
-  
-  return f"""
-    Нейросетевой подход дал ответ:
-      {neuro}
-    Алфавитный подход дал ответ:
-      {alphabet}
-    Анализ по словам дал ответ:
-      {words}
-  """
+  try:
+    line = file.decode()
+    neuro =  detect_language_by_neuro(line)
+    alphabet = detect_language_by_alphabet(line)
+    words = detect_language_by_words(line)
+    
+    return f"""
+      Нейросетевой подход дал ответ:
+        {neuro}
+      Алфавитный подход дал ответ:
+        {alphabet}
+      Анализ по словам дал ответ:
+        {words}
+    """
+  except:
+    return "Упс... Произошла какая-то ошибка, попробуйте позже..."
 
 @app.post("/file/learndetectlanguage")
 async def learn_by_file(file: Annotated[bytes, File()], expectedLanguage: str):
