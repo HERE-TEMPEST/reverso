@@ -6,7 +6,7 @@ import re
 class FindFilesBySubstringAgent(AgentBase):
   def __init__(self):
     self.neo4JStorage = Neo4JStorage("bolt://localhost:7687", "neo4j", "password")
-    self.fileStorage = FileStorage("localhost:9000/", "ADdqhW3Dr7im2uGIgYUE", "WzKYkXnxRA56J9AuHmd1Z9zPK18P6ClHX5w8jOFT")
+    self.fileStorage = FileStorage("localhost:9000/", "fqBVnMbCZ2teclEKtCYd", "2PCNB9ASEwfYP6Z4O7dihVnm9fraDPgLkMWNhjyb")
 
   def execute(self, input_dict: dict) -> str:
     answer = "#"

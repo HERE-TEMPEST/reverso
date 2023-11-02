@@ -9,6 +9,7 @@ from repository import Neo4JStorage, LetterEntity, WordEntity, LanguageEntity
 from summarizer import Summarizer
 from analize.analize import TextRank4Sentences
 from rake_nltk import Rake
+import yake
 
 morph = pymorphy2.MorphAnalyzer()
 db = TinyDB('./db.json')
@@ -206,10 +207,10 @@ def detect_language_by_words(text: str):
     return f"Данный текст является на {percentRussian}% является русскоязычным, на {percentEnglish}% является англоязычным и на {percentOtherLanguages}% состоит из других языков" 
 
 def find_key_words(text: str):
-    rake_nltk_var = Rake()
-    rake_nltk_var.extract_keywords_from_text(text)
-    keyword_extracted = rake_nltk_var.get_ranked_phrases()
-    return ', '.join(keyword_extracted[0:6])
+    ext_= yake.KeywordExtractor(n=2, dedupLim=0.3, top=20, features=None)
+    key = ext_.extract_keywords(text)
+    words = [key_[0] for key_ in key]
+    return ', '.join(words)
 
 def make_text_shorter(text: str, numb_of_sent: int):
     tr4sh = TextRank4Sentences()
