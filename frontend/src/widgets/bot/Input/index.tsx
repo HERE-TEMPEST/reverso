@@ -4,6 +4,7 @@
 import { Icon } from '@shared/ui'
 import { useState } from 'react'
 import styles from './Input.module.scss'
+import { MicrophoneInputFeature } from '@features/Microphone'
 
 interface InputMessageWidgetProps {
 	onSendMessage: (message: string) => void
@@ -29,6 +30,7 @@ export const InputMessageWidget = (props: InputMessageWidgetProps) => {
 				onChange={(e) => setMessage(e.target.value)}
 				className={styles.searchInput}
 			/>
+			<MicrophoneInputFeature onChange={setMessage} />
 			<div
 				onClick={() => {
 					if (message.trim() !== '') {

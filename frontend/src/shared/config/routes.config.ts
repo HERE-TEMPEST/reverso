@@ -65,6 +65,12 @@ export const appRoutes = {
 			return '/supports'
 		}
 	},
+	botSettings: {
+		path: 'bot-settings',
+		goto() {
+			return '/bot-settings'
+		}
+	},
 	base: {
 		path: '/',
 		goto() {
