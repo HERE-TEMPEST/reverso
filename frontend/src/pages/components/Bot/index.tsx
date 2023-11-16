@@ -59,10 +59,9 @@ export const BotPage = () => {
 	}, [])
 
 	const onSendMessage = async (message: string) => {
-		if (websocketRef.current) {
+		if (websocketRef.current && websocketRef.current.readyState === websocketRef.current.OPEN) {
 			await websocketRef.current.send(message)
 		}
-
 		setMessages((_messages) => [
 			..._messages,
 			{

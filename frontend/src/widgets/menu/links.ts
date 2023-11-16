@@ -30,6 +30,10 @@ export const menuLinks = [
 		link: appRoutes.notesCreator.goto()
 	},
 	{
+		label: 'Настройки бота',
+		link: appRoutes.botSettings.goto()
+	},
+	{
 		label: 'Справочник',
 		link: appRoutes.supports.goto()
 	}

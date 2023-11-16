@@ -7,6 +7,8 @@ name = "pypi"
 fastapi = "*"
 uvicorn = "*"
 minio = "*"
+summarizer = "*"
+rake-nltk = "*"
 
 [dev-packages]
 

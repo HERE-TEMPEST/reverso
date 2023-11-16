@@ -4,6 +4,7 @@ import { appRoutes } from '@shared/config'
 
 import {
 	BotPage,
+	BotSettingsPage,
 	DatabasePage,
 	DependenciesPage,
 	LanguageDetector,
@@ -62,6 +63,10 @@ export const GenerateRoutes = () => {
 				{
 					path: appRoutes.supports.path,
 					element: <SupportsPage />
+				},
+				{
+					path: appRoutes.botSettings.path,
+					element: <BotSettingsPage />
 				},
 				{
 					path: appRoutes.parsedText.path,
